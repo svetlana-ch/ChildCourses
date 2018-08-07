@@ -1,0 +1,41 @@
+[DEBUG] 2018-07-05 15:01:24.976 [http-nio-8080-exec-3] SQLUserDAO - Logger Debug               createUser
+[INFO ] 2018-07-05 15:01:25.191 [http-nio-8080-exec-3] SQLUserDAO - Logger Info         createUser
+[DEBUG] 2018-07-15 19:47:34.481 [http-nio-8080-exec-9] SQLUserDAO - Logger Debug               createUser
+[INFO ] 2018-07-15 19:47:34.568 [http-nio-8080-exec-9] SQLUserDAO - Logger Info         createUser
+[DEBUG] 2018-07-15 19:51:23.065 [http-nio-8080-exec-8] SQLUserDAO - Logger Debug               createUser
+[INFO ] 2018-07-15 19:51:23.071 [http-nio-8080-exec-8] SQLUserDAO - Logger Info         createUser
+[DEBUG] 2018-07-15 20:28:04.993 [http-nio-8080-exec-9] SQLUserDAO - Logger Debug               createUser
+[INFO ] 2018-07-15 20:28:04.997 [http-nio-8080-exec-9] SQLUserDAO - Logger Info         createUser
+[DEBUG] 2018-07-15 20:42:19.215 [http-nio-8080-exec-5] SQLUserDAO - Logger Debug               createUser
+[INFO ] 2018-07-15 20:42:19.215 [http-nio-8080-exec-5] SQLUserDAO - Logger Info         createUser
+[DEBUG] 2018-07-15 20:46:54.226 [http-nio-8080-exec-9] SQLUserDAO - Logger Debug               createUser
+[INFO ] 2018-07-15 20:46:54.226 [http-nio-8080-exec-9] SQLUserDAO - Logger Info         createUser
+[DEBUG] 2018-07-17 12:08:55.808 [http-nio-8080-exec-72] SQLUserDAO - Logger Debug               createUser
+[INFO ] 2018-07-17 12:08:55.872 [http-nio-8080-exec-72] SQLUserDAO - Logger Info         createUser
+[DEBUG] 2018-07-17 12:10:40.814 [http-nio-8080-exec-74] SQLUserDAO - Logger Debug               createUser
+[INFO ] 2018-07-17 12:10:40.824 [http-nio-8080-exec-74] SQLUserDAO - Logger Info         createUser
+[DEBUG] 2018-07-17 12:17:17.534 [http-nio-8080-exec-71] SQLUserDAO - Logger Debug               createUser
+[INFO ] 2018-07-17 12:17:17.534 [http-nio-8080-exec-71] SQLUserDAO - Logger Info         createUser
+[DEBUG] 2018-07-17 12:35:37.739 [http-nio-8080-exec-73] SQLUserDAO - Logger Debug               createUser
+[INFO ] 2018-07-17 12:35:37.742 [http-nio-8080-exec-73] SQLUserDAO - Logger Info         createUser
+[DEBUG] 2018-07-19 23:41:43.383 [http-nio-8080-exec-6] SQLUserDAO - Logger Debug               createUser
+[INFO ] 2018-07-19 23:41:43.594 [http-nio-8080-exec-6] SQLUserDAO - Logger Info         createUser
+[DEBUG] 2018-07-19 23:43:45.483 [http-nio-8080-exec-5] SQLUserDAO - Logger Debug               createUser
+[INFO ] 2018-07-19 23:43:45.485 [http-nio-8080-exec-5] SQLUserDAO - Logger Info         createUser
+[DEBUG] 2018-07-20 06:33:48.743 [http-nio-8080-exec-16] SQLUserDAO - Logger Debug               createUser
+[INFO ] 2018-07-20 06:33:48.802 [http-nio-8080-exec-16] SQLUserDAO - Logger Info         createUser
+[DEBUG] 2018-07-20 06:43:21.962 [http-nio-8080-exec-21] SQLUserDAO - Logger Debug               createUser
+[INFO ] 2018-07-20 06:43:22.027 [http-nio-8080-exec-21] SQLUserDAO - Logger Info         createUser
+[DEBUG] 2018-07-20 10:21:03.236 [http-nio-8080-exec-9] SQLUserDAO - Logger Debug               createUser
+[INFO ] 2018-07-20 10:21:03.476 [http-nio-8080-exec-9] SQLUserDAO - Logger Info         createUser
+[DEBUG] 2018-08-01 19:21:41.081 [http-nio-8080-exec-5] SQLUserDAO - Logger Debug               createUser
+[INFO ] 2018-08-01 19:21:41.429 [http-nio-8080-exec-5] SQLUserDAO - Logger Info         createUser
+[DEBUG] 2018-08-02 08:08:23.050 [http-nio-8080-exec-11] SignIn - Test debug   User Semenov SignIn
+[DEBUG] 2018-08-02 08:37:27.727 [http-nio-8080-exec-31] SignIn - Test debug   User Носков Сергей SignIn
+[DEBUG] 2018-08-02 08:37:58.528 [http-nio-8080-exec-40] SignIn - Test debug   User Носков Сергей SignIn
+[DEBUG] 2018-08-02 08:38:15.779 [http-nio-8080-exec-39] SignIn - Test debug   User Носков Сергей SignIn
+[DEBUG] 2018-08-02 15:50:11.080 [http-nio-8080-exec-2] SignIn - Test debug   User Semenov SignIn
+[DEBUG] 2018-08-02 16:00:29.252 [http-nio-8080-exec-1] SignIn - Test debug   User a SignIn
+[DEBUG] 2018-08-02 16:00:47.214 [http-nio-8080-exec-5] SignIn - Test debug   User a SignIn
+[DEBUG] 2018-08-02 19:24:50.116 [http-nio-8080-exec-8] SignIn - Test debug   User a SignIn
+[DEBUG] 2018-08-06 19:03:00.402 [http-nio-8080-exec-2] SignIn - Test debug   User Semenov SignIn

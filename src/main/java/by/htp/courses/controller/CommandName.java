@@ -1,0 +1,7 @@
+package by.htp.courses.controller;
+
+public enum CommandName {
+	MAIN_PAGE, TEACHERS_PAGE, SUBJECTS_PAGE, SIGN_IN, SIGN_UP, SIGN_OUT, 
+	USERS_EDIT, USERS_SEARCH, SUBJECTS_EDIT, SUBJECTS_SEARCH, LOCALIZATION;
+
+}
