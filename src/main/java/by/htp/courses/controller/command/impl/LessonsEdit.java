@@ -2,31 +2,22 @@ package by.htp.courses.controller.command.impl;
 
 import java.io.IOException;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import by.htp.courses.controller.command.Command;
 
-public class SignOut implements Command{
+public class LessonsEdit implements Command{
+	
+	private static final Logger logger = LoggerFactory.getLogger(LessonsEdit.class);
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		
-
-	       
-	            request.removeAttribute("user");
-	            request.getSession().invalidate();
-	            response.sendRedirect("index.jsp");
-	       
-		
-			
-		//RequestDispatcher dispatcher = request.getRequestDispatcher(JSPPagePath.MAIN_PAGE);
-		//dispatcher.forward(request, response);
-		
-
+		// TODO Auto-generated method stub
 		
 	}
 

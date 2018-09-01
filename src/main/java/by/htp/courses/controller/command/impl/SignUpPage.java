@@ -9,25 +9,20 @@ import javax.servlet.http.HttpServletResponse;
 
 import by.htp.courses.controller.command.Command;
 
-public class SignOut implements Command{
+public class SignUpPage implements Command{
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		
+		RequestDispatcher dispatcher = request.getRequestDispatcher(JSPPagePath.SIGN_UP_PAGE);
 
-	       
-	            request.removeAttribute("user");
-	            request.getSession().invalidate();
-	            response.sendRedirect("index.jsp");
-	       
-		
-			
-		//RequestDispatcher dispatcher = request.getRequestDispatcher(JSPPagePath.MAIN_PAGE);
-		//dispatcher.forward(request, response);
-		
-
+		try {
+			dispatcher.forward(request, response);
+		} catch (ServletException | IOException e) {
+			//log ?????????????
+		}
 		
 	}
+		
+	
 
 }

@@ -27,15 +27,30 @@
     <fmt:setLocale value="${sessionScope.local}" />
 	<fmt:setBundle basename="locale" var="loc" />
 	
-	<fmt:message bundle="${loc}" key="locale.useredit.regform.login.text" var="login" />
+	
+	<fmt:message bundle="${loc}" key="local.useredit.regform.error.text" var="messageLoginError" />
+	
+	<fmt:message bundle="${loc}" key="locale.registrationform.adduser.text" var="addUser" />
+	<fmt:message bundle="${loc}" key="locale.registrationform.name.text" var="surnameName" />
+	<fmt:message bundle="${loc}" key="locale.registrationform.login.text" var="login" />
+	<fmt:message bundle="${loc}" key="locale.registrationform.password.text" var="password" />
+	<fmt:message bundle="${loc}" key="locale.registrationform.button.adduser.text" var="buttonAddUser" />		
+	<fmt:message bundle="${loc}" key="locale.registrationform.button.clear.text" var="buttonClear" />
 	
 	
-	<fmt:message bundle="${loc}" key="locale.useredit.regform.password.text" var="password" />
-	<fmt:message bundle="${loc}" key="locale.useredit.regform.signin.text" var="signIn" />
-	<fmt:message bundle="${loc}" key="locale.useredit.regform..signup.text" var="signUp" />
-	<fmt:message bundle="${loc}" key="local.useredit.regform.error.text" var="messageLoginError" />	
+	<fmt:message bundle="${loc}" key="locale.useredit.table.searchwhere.text" var="searchWhere" />	
+	<fmt:message bundle="${loc}" key="locale.useredit.table.searchwhat.text" var="searchWhat" />
+	<fmt:message bundle="${loc}" key="locale.useredit.table.search.text" var="search" />
+	<fmt:message bundle="${loc}" key="locale.useredit.table.role.text" var="role" />
 	
+	<fmt:message bundle="${loc}" key="locale.table.button.edit.text" var="buttonEdit" />
+	<fmt:message bundle="${loc}" key="locale.table.button.delete.text" var="buttonDelete" />
 	
+	<fmt:message bundle="${loc}" key="locale.table.edit.text" var="edit" />
+	<fmt:message bundle="${loc}" key="locale.table.delete.text" var="delete" />
+	
+	<fmt:message bundle="${loc}" key="locale.useredit.deluser.text" var="delUser" />	
+		
 
 
 </head>
@@ -44,63 +59,68 @@
 
 		<jsp:include page="include/header.jsp"></jsp:include>
 
-
-
-
 		<br><br><br><br><br>
 
 
+		<div class="form signup">
 
-
-
-	<div class="form signup">
-	
 		<form action="Controller" method='post'>
 			<fieldset>				
-				<legend>Добавление пользователя</legend>
+				<legend>${addUser}</legend>
 				
 				<input type="hidden" name="command" value="sign_up" />	
 					
 				<div>
-					<label for="Name">Фамилия Имя</label>
+					<label for="Name">${surnameName}</label>
 					<input type="text" name="name" value="" />
+				</div>
+					
+				<div>
+					<label for="Login">${login}</label>
+					<input type="text" name="login" value="" />
 				</div>
 				
 				<div>
 					<label for="e-mail">E-mail</label>
 					<input type="text" name="e-mail" value="" />
-				</div>					
+				</div>
 				
-				<div>
-					<label for="Login">Логин</label>
-					<input type="text" name="login" value="" />
-				</div>				
-								
 				<div>				
-					<label for="Password">Пароль</label>
+					<label for="Password">${password}</label>
 					<input type="password" name="password" value="" />
-				</div>			
+				</div>	
+				
+				<!--  
+    <c:if test="${isLoginTaken == true}">
+        <p style="color: #FF0000;" align="center">${login_error}</p>
+    </c:if>
+
+    <c:if test="${isLoginTaken == false}">
+        <p style="color: #FF0000;" align="center">${error}</p>
+    </c:if>
+				-->		
 							
-				<input type="submit" value="Добавить" />
+				<div><input type="submit" value="${buttonAddUser}" /></div>
+				<div><input type="reset" value="${buttonClear}"></div>          
 				
 			</fieldset>
 		</form>
-	</div>	
-	
+	</div>
+			
 	
 				<form action="Controller" method='post'>
 				
 				<input type="hidden" name="command" value="users_search" />
 				
-					Ищем по:<select name="searchtype">
-								<option value="name" selected>Фамилии Имени
+					${searchWhere}:<select name="searchtype">
+								<option value="name" selected>${surnameName}
 								<option value="email" >E-mail
-								<option value="login" > Логину
-								<option value="role" >Роли
+								<option value="login" >${login}
+								<option value="role" >${role}
 								<option value="id" >Id
 							</select> 
-					Что ищем:<input name="searchterm" value=""> 
-					<input type="submit" value="Поиск">
+					${searchWhat}:<input name="searchterm" value=""> 
+					<input type="submit" value="${search}">
 				</form>
 	
 	
@@ -108,13 +128,13 @@
 	<table class="table_blur" border="3">
 		<tr>
 			<th width="auto">ID</th>
-			<th>Name</th>
+			<th>${surnameName}</th>
 			<th>e-mail</th>
-			<th>Role</th>
-			<th>Login</th>
-			<th>Password</th>
-			<th>Edit</th>
-			<th>Del</th>
+			<th>${role}</th>
+			<th>${login }</th>
+			<th>${password}</th>
+			<th>${edit}</th>
+			<th>${delete}</th>
 		</tr>
 
 		<c:forEach items="${users}" var="user">
@@ -122,16 +142,20 @@
 
 				<form action="Controller" method='post'>
 				
-				<input type="hidden" name="command" value="users_edit" />
-		
+				<input type="hidden" name="command" value="users_edit" />	
 		
 				
 					<td><input name="id" value="${user.id}" /></td>								
 					<td><input type="text" name="name" value="${user.name}" /></td>
 					<td><input type="text" name="e-mail" value="${user.email}" /></td>
-					<td><input name="role" value="${user.role}">                        
-                            
+					                      
+                    <td><select name="role">                        
+                            <option selected value="${user.role}">${user.role}</option>
+                            <option value="TEACHER">TEACHER</option>
+                            <option value="ADMIN">ADMIN</option>
+                            <option value="USER">USER</option>                       
                     </select>
+                    </td>
                     </td>
 					<td><input type="text" name="login" value="${user.login}" /></td>
 					<td><input type="text" name="password" value="${user.password}" /></td>
@@ -140,32 +164,40 @@
 
 					
 					<td>
-						<input type="submit" name="update" value="Обновить" class="button9"/>
+						<input type="submit" name="update" value="${buttonEdit}""/>
 						
 					</td>
 					
 					<td>
-						<button type="submit" name="delete" value="delete" class="button9">Удалить</button>
+						<button type="submit" name="delete" value="delete" 
+						onclick="if (!(confirm('${delUser}'))) return false">${buttonDelete}</button>
                		 </td>
-				
+               		                		 
 				</form>
 			</tr>
 		</c:forEach>
 	</table>
-	
-	
-	
-	
-  	<jsp:include page="include/footer.jsp"></jsp:include>
-  	 	
-  	
-  	
-    <!-- Bootstrap core JavaScript
+
+
+
+
+        
+        
+        
+
+
+
+
+	<jsp:include page="include/footer.jsp"></jsp:include>
+
+
+
+			<!-- Bootstrap core JavaScript
     ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script src="assets/js/bootstrap.min.js"></script>
-  </body>
+			<!-- Placed at the end of the document so the pages load faster -->
+			<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+			<script src="assets/js/bootstrap.min.js"></script>
+</body>
 </html>	
 	
   

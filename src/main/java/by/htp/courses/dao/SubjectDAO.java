@@ -9,9 +9,10 @@ public interface SubjectDAO {
 	
 	boolean create(Subject subject) throws DAOException;
 	Subject read(Subject subject) throws DAOException;
-	List<Subject> getAll(String WHERE) throws DAOException;
+	List<Subject> getAll() throws DAOException;
 	boolean update(Subject subject) throws DAOException;
 	boolean delete(int id) throws DAOException;
 	List<Subject> search(String where, String what) throws DAOException;
-
+	
+	
 }

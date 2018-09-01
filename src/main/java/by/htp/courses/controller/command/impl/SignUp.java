@@ -7,13 +7,19 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import by.htp.courses.controller.command.Command;
 import by.htp.courses.domain.User;
 import by.htp.courses.service.ServiceFactory;
 import by.htp.courses.service.UserService;
 import by.htp.courses.service.exception.ServiceException;
+import by.htp.courses.service.impl.UserServiceImpl;
 
 public class SignUp implements Command{
+	
+	private static final Logger logger = LoggerFactory.getLogger(SignUp.class);
 	
 	private static final String LOGIN_PARAM_NAME = "login";
 	private static final String PASSWORD_PARAM_NAME = "password";
@@ -43,9 +49,7 @@ public class SignUp implements Command{
 		System.out.println("e-mail ==     " + email);
 		User user = null;
 			
-		String goToPage = null;
-		
-		
+		String goToPage = null;		
 		
 		try {			
 			user = userService.signup(name, login, email, password);
@@ -54,14 +58,17 @@ public class SignUp implements Command{
 				System.out.println("SIGN_UP2="+ user);
 				goToPage = JSPPagePath.MAIN_PAGE;
 			}else{
-				request.setAttribute("errorMessage", "Incorrect login or password.");
+				request.setAttribute("errorRegistrationMessage", "User is not created. Incorrect login or password.");
+				logger.error("registration error");
 				goToPage = JSPPagePath.SIGN_UP;
 			}
 			
 		} catch (ServiceException e) {
+			
 			//goToPage = JSPPagePath.ERROR_PAGE;
-			// log
-			e.printStackTrace();
+			logger.error("registration exception", e);
+			goToPage = JSPPagePath.SIGN_UP;// change to error 
+			
 		}	
 
 		

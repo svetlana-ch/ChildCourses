@@ -5,8 +5,7 @@
     </Properties>
 
     <Appenders>
-        <File name="fileLogger" fileName="${basePath}/logInfo.log"
-              filePattern="${basePath}/logInfo-%d{yyyy-MM-dd}.log">
+        <File name="fileLogger" fileName="${basePath}/logInfo.log">
             <PatternLayout>
                 <pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n</pattern>
             </PatternLayout>

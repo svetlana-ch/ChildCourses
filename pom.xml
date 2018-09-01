@@ -7,10 +7,16 @@
   <version>0.0.1-SNAPSHOT</version>
   <name>child_courses Maven Webapp</name>
   <url>http://maven.apache.org</url>
+  
   <properties>
   	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding> 
-  	<maven.compiler.source>1.7</maven.compiler.source> 
-  	<maven.compiler.target>1.7</maven.compiler.target> 
+  	<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+	<maven.compiler.source>1.8</maven.compiler.source>
+	<maven.compiler.target>1.8</maven.compiler.target> 
+	<junit.version>5.2.0</junit.version>
+	<mockito.version>2.2.0</mockito.version>
+	<slf4j.version>1.7.7</slf4j.version>
+	<slf4j-log4j12.version>1.7.25</slf4j-log4j12.version>
   </properties>
   <dependencies>
     <dependency>
@@ -39,24 +45,52 @@
 		<version>1.1.2</version>
 	</dependency>
 
- <dependency>
-  	<groupId>mysql</groupId> 
-  	<artifactId>mysql-connector-java</artifactId> 
-  	<version>5.1.6</version> 
- </dependency>
- 
- <dependency>
-    <groupId>org.apache.logging.log4j</groupId>
-    <artifactId>log4j-api</artifactId>
-    <version>2.11.0</version>
-  </dependency>
-  <dependency>
-    <groupId>org.apache.logging.log4j</groupId>
-    <artifactId>log4j-core</artifactId>
-    <version>2.11.0</version>
-  </dependency>
+	<dependency>
+		<groupId>mysql</groupId>
+		<artifactId>mysql-connector-java</artifactId>
+		<version>5.1.6</version>
+	</dependency>
+
+	<dependency>
+		<groupId>org.apache.logging.log4j</groupId>
+		<artifactId>log4j-api</artifactId>
+		<version>2.11.0</version>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.logging.log4j</groupId>
+		<artifactId>log4j-core</artifactId>
+		<version>2.11.0</version>
+	</dependency>
+
+	<dependency>
+		<groupId>org.slf4j</groupId>
+		<artifactId>slf4j-api</artifactId>
+		<version>${slf4j.version}</version>
+	</dependency>
+
+	<dependency>
+		<groupId>org.junit.jupiter</groupId>
+		<artifactId>junit-jupiter-engine</artifactId>
+		<version>${junit.version}</version>
+		<scope>test</scope>
+	</dependency>
+
+	<dependency>
+		<groupId>org.mockito</groupId>
+		<artifactId>mockito-core</artifactId>
+		<version>${mockito.version}</version>
+		<scope>test</scope>
+	</dependency>
+
+	<dependency>
+		<groupId>org.slf4j</groupId>
+		<artifactId>slf4j-log4j12</artifactId>
+		<version>${slf4j-log4j12.version}</version>
+	</dependency>		
 
   </dependencies>
+  
+  
   <build>
     <finalName>child_courses</finalName>
   </build>

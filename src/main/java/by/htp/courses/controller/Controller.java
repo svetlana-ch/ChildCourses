@@ -22,7 +22,7 @@ public class Controller extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("Мы в контроллере метод doGet" );
+		System.out.println(" метод doGet" );
 		String commandName = request.getParameter(COMMAND_PARAM_NAME);
 		System.out.println("commandNAme=" + commandName);
 		
@@ -33,7 +33,7 @@ public class Controller extends HttpServlet {
 
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("Мы в контроллере метод doPost" );
+		System.out.println(" метод doPost" );
 		String commandName = request.getParameter(COMMAND_PARAM_NAME);
 		System.out.println("commandNAme=" + commandName);
 		

@@ -4,11 +4,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import by.htp.courses.controller.command.Command;
+import by.htp.courses.controller.command.impl.ChildrenEdit;
+import by.htp.courses.controller.command.impl.LessonsEdit;
 import by.htp.courses.controller.command.impl.Localization;
 import by.htp.courses.controller.command.impl.MainPage;
 import by.htp.courses.controller.command.impl.SignIn;
 import by.htp.courses.controller.command.impl.SignOut;
 import by.htp.courses.controller.command.impl.SignUp;
+import by.htp.courses.controller.command.impl.SignUpPage;
 import by.htp.courses.controller.command.impl.SubjectsEdit;
 import by.htp.courses.controller.command.impl.SubjectsPage;
 import by.htp.courses.controller.command.impl.TeachersPage;
@@ -30,6 +33,9 @@ class CommandProvider {
 		commands.put(CommandName.LOCALIZATION, new Localization());
 		commands.put(CommandName.TEACHERS_PAGE, new TeachersPage());
 		commands.put(CommandName.SUBJECTS_PAGE, new SubjectsPage());
+		commands.put(CommandName.SIGN_UP_PAGE, new SignUpPage());
+		commands.put(CommandName.CHILDREN_EDIT, new ChildrenEdit());
+		commands.put(CommandName.LESSONS_EDIT, new LessonsEdit());
 	}
 
 	Command getCommand(String commandName) {

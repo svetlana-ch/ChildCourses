@@ -1,133 +1,92 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
-<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %> 
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <!DOCTYPE html>
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>Insert title here</title>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="assets/ico/favicon.png">
 
-<style type="text/css">
-.menu1 li {
-display: inline;
-}
+    <title>My Baby</title>
 
+    <!-- Bootstrap core CSS -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <link href="assets/css/font-awesome.min.css" rel="stylesheet">
+        
 
-.table_blur {
-  background: #f5ffff;
-  border-collapse: collapse;
-  text-align: left;
-  border: "10";
-}
-.table_blur th {
-  border-top: 1px solid #777777;	
-  border-bottom: 1px solid #777777; 
-  box-shadow: inset 0 1px 0 #999999, inset 0 -1px 0 #999999;
-  background: linear-gradient(#9595b6, #5a567f);
-  color: white;
-  padding: 10px 15px;
-  position: relative;
-}
-.table_blur th:after {
-  content: "";
-  display: block;
-  position: absolute;
-  left: 0;
-  top: 25%;
-  height: 25%;
-  width: 100%;
-  background: linear-gradient(rgba(255, 255, 255, 0), rgba(255,255,255,.08));
-}
-.table_blur tr:nth-child(odd) input{
-  background: #ebf3f9;
-}
-.table_blur th:first-child {
-  border-left: 1px solid #777777;	
-  border-bottom:  1px solid #777777;
-  box-shadow: inset 1px 1px 0 #999999, inset 0 -1px 0 #999999;
-}
-.table_blur th:last-child {
-  border-right: 1px solid #777777;
-  border-bottom:  1px solid #777777;
-  box-shadow: inset -1px 1px 0 #999999, inset 0 -1px 0 #999999;
-}
-.table_blur th {
-  border: 1px solid #e3eef7;
-  padding: 10px 15px;
-  position: relative;
-  transition: all 0.5s ease;
-}
-.table_blur tbody:hover th {
-  color: transparent;
-  text-shadow: 0 0 3px #a09f9d;
-}
-.table_blur tbody:hover tr:hover th {
-  color: #444444;
-  text-shadow: none;
-}
+    <!-- Custom styles for this template -->      
+   <link rel="stylesheet" href="css/admin_header.css" type="text/css" />
+    <link href="assets/css/main.css" rel="stylesheet">
+    
+    
+    <fmt:setLocale value="${sessionScope.local}" />
+	<fmt:setBundle basename="locale" var="loc" />
+	
+	<fmt:message bundle="${loc}" key="locale.useredit.regform.login.text" var="login" />
+	
+	
+	<fmt:message bundle="${loc}" key="locale.useredit.regform.password.text" var="password" />
+	<fmt:message bundle="${loc}" key="locale.useredit.regform.signin.text" var="signIn" />
+	<fmt:message bundle="${loc}" key="locale.useredit.regform..signup.text" var="signUp" />
+	<fmt:message bundle="${loc}" key="local.useredit.regform.error.text" var="messageLoginError" />	
+	
+	
 
-
-
-
-a.button9 {
-  position: relative;
-  display: inline-block;
-  color: #777674;
-  font-weight: bold;
-  text-decoration: none;
-  text-shadow: rgba(255,255,255,.5) 1px 1px, rgba(100,100,100,.3) 3px 7px 3px;
-  user-select: none;
-  padding: 1em 2em;
-  outline: none;
-  border-radius: 3px / 100%;  
-  background-image:
-   linear-gradient(45deg, rgba(255,255,255,.0) 30%, rgba(255,255,255,.8), rgba(255,255,255,.0) 70%),
-   linear-gradient(to right, rgba(255,255,255,1), rgba(255,255,255,0) 20%, rgba(255,255,255,0) 90%, rgba(255,255,255,.3)),
-   linear-gradient(to right, rgba(125,125,125,1), rgba(255,255,255,.9) 45%, rgba(125,125,125,.5)),
-   linear-gradient(to right, rgba(125,125,125,1), rgba(255,255,255,.9) 45%, rgba(125,125,125,.5)),
-   linear-gradient(to right, rgba(223,190,170,1), rgba(255,255,255,.9) 45%, rgba(223,190,170,.5)),
-   linear-gradient(to right, rgba(223,190,170,1), rgba(255,255,255,.9) 45%, rgba(223,190,170,.5));
-  background-repeat: no-repeat;
-  background-size: 200% 100%, auto, 100% 2px, 100% 2px, 100% 1px, 100% 1px;
-  background-position: 200% 0, 0 0, 0 0, 0 100%, 0 4px, 0 calc(100% - 4px);
-  box-shadow: rgba(0,0,0,.5) 3px 10px 10px -10px;
-  background-color: #5a567f;
-}
-a.button9:hover {
-  transition: .9s linear;
-  background-position: -200% 0, 0 0, 0 0, 0 100%, 0 4px, 0 calc(100% - 4px);
-}
-a.button9:active {
-  top: 4px;
-
-
-</style>
 
 </head>
 <body>
 
-<div class="header" >
-          <ul class="menu1">
-          	<li><a href=Controller?command=main_page class="button9">На главную</a></li>
-            <li><a href=Controller?command=users_edit class="button9">Пользователи</a></li>
-            <li><a href=Controller?command=main_page class="button9">Предметы</a></li>
-            <li><a href=Controller?command=main_page class="button9">Учителя</a></li>
-            <li><a href=Controller?command=main_page class="button9">Родители</a></li>
-            <li><a href=Controller?command=main_page class="button9">Заявки</a></li>
-            <li><a href=Controller?command=main_page class="button9">Отчеты</a></li>
-          </ul>
-          <ul class="">
-            <c:if test="${userActive == null}">
-            <li><a href=Controller?command=sign_in>Вход</a></li>
-            </c:if>
-            <c:if test="${userActive != null}">
-            <p class=""><b>${userActive.login} (${userActive.nameRole})</b></p>            
-            <li><a href=do?command=Logout>Профиль</a></li>
-            <li><a href=do?command=Logout>Выход</a></li>
-            </c:if>
-          </ul>
-  </div>
 
+		<jsp:include page="include/header.jsp"></jsp:include>
+
+
+
+
+		<br><br><br><br><br>
+
+
+
+
+
+	<div class="form signup">
+	
+		<form action="Controller" method='post'>
+			<fieldset>				
+				<legend>Добавление пользователя</legend>
+				
+				<input type="hidden" name="command" value="sign_up" />	
+					
+				<div>
+					<label for="Name">Фамилия Имя</label>
+					<input type="text" name="name" value="" />
+				</div>
+				
+				<div>
+					<label for="e-mail">E-mail</label>
+					<input type="text" name="e-mail" value="" />
+				</div>					
+				
+				<div>
+					<label for="Login">Логин</label>
+					<input type="text" name="login" value="" />
+				</div>				
+								
+				<div>				
+					<label for="Password">Пароль</label>
+					<input type="password" name="password" value="" />
+				</div>			
+							
+				<input type="submit" value="Добавить" />
+				
+			</fieldset>
+		</form>
+	</div>	
+	
 	
 				<form action="Controller" method='post'>
 				
@@ -163,20 +122,20 @@ a.button9:active {
 
 				<form action="Controller" method='post'>
 				
-				<input type="hidden" name="command" value="users_edit" />
-		
+				<input type="hidden" name="command" value="users_edit" />	
 		
 				
 					<td><input name="id" value="${user.id}" /></td>								
 					<td><input type="text" name="name" value="${user.name}" /></td>
 					<td><input type="text" name="e-mail" value="${user.email}" /></td>
-					<td><select name="role" class="form-control">
-                        <c:forEach items="${roles}" var="role">
-                            <option value="${role.id}" role=${role.id} ${role.id==user.fk_Role?"selected":""}>
-                                 ${role.role}
-                            </option>
-                        </c:forEach>
+					                      
+                    <td><select name="role">                        
+                            <option selected value="${user.role}">${user.role}</option>
+                            <option value="TEACHER">TEACHER</option>
+                            <option value="ADMIN">ADMIN</option>
+                            <option value="USER">USER</option>                       
                     </select>
+                    </td>
                     </td>
 					<td><input type="text" name="login" value="${user.login}" /></td>
 					<td><input type="text" name="password" value="${user.password}" /></td>
@@ -197,6 +156,22 @@ a.button9:active {
 			</tr>
 		</c:forEach>
 	</table>
+	
+	
+	
+	
+  	<jsp:include page="include/footer.jsp"></jsp:include>
+  	 	
+  	
+  	
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+  </body>
+</html>	
+	
   
 </body>
 </html>

@@ -7,10 +7,11 @@ public class Subject {
 	private int ageChildFrom;
 	private int ageChildTo;
 	private String sexChild;
-	private String timeSpending; // утро день вечер
+	private String timeSpending;
 	private int numberPerWeek;
 	private boolean isNew;
 	private double cost;
+	
 	public int getId() {
 		return id;
 	}

@@ -57,7 +57,7 @@
 				<li class="active"><a href=Controller?command=main_page>${buttonHome}</a></li>
 				<li><a href=Controller?command=teachers_page>${buttonTeachers}</a></li>
 				<li><a href=Controller?command=subjects_page>${buttonSubjects}</a></li>
-				<li><a href=Controller?command=main_page>${buttonServices}</a></li>
+				<li><a href=Controller?command=main_page>${buttonServices}</a></li>				
 				<li><a data-toggle="modal" data-target="#myModal"
 					href="#myModal"><i class="fa fa-envelope-o"></i></a></li>
 
@@ -86,6 +86,8 @@
 				<li><a href=Controller?command=subjects_edit>${buttonSubjectsEdit}</a></li>
 				<li><a href="#">${buttonServicesEdit}</a></li>
 				<li><a href="#">${buttonReports}</a></li>
+				<li><a href=Controller?command=children_edit>ученики</a></li>
+				<li><a href=Controller?command=lessons_edit>уроки</a></li>
 			</ul>
 		</div>
 		<!--/.nav-collapse -->
@@ -108,7 +110,7 @@
 	<c:if test="${sessionScope.user == null}">
 		<div class="enter">
 			<div>
-				<a href=Controller?command=sign_up><c:out value="${signUp}" /></a>
+				<a href=Controller?command=sign_up_page><c:out value="${signUp}" /></a>
 			</div>
 			<form action="Controller" method="post">
 				<input type="hidden" name="command" value="sign_in" />
