@@ -15,7 +15,6 @@ import by.htp.courses.dao.ChildDAO;
 import by.htp.courses.dao.connectionpool.ConnectionPool;
 import by.htp.courses.dao.exception.DAOException;
 import by.htp.courses.domain.Child;
-import by.htp.courses.domain.User;
 
 
 public class SQLChildDAO implements ChildDAO{

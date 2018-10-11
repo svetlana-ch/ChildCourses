@@ -28,39 +28,36 @@
 	<fmt:setBundle basename="locale" var="loc" />
 	
 	
-	<fmt:message bundle="${loc}" key="local.subjectedit.subjectedit.error.text" var="messageAddSubjectError" />
+	<fmt:message bundle="${loc}" key="local.lessonsedit.error.text" var="messageAddLessonError" />
 	
-	<fmt:message bundle="${loc}" key="locale.subjectedit.addsubject.text" var="addSubject" />
-	<fmt:message bundle="${loc}" key="locale.subjectedit.namesubject.text" var="nameSubject" />
-	<fmt:message bundle="${loc}" key="locale.subjectedit.agechildfrom.text" var="ageChildFrom" />
-	<fmt:message bundle="${loc}" key="locale.subjectedit.agechildto.text" var="ageChildTo" />
-	<fmt:message bundle="${loc}" key="locale.subjectedit.sexchild.text" var="sexChild" />
-	<fmt:message bundle="${loc}" key="locale.subjectedit.timespending.text" var="timeSpending" />
-	<fmt:message bundle="${loc}" key="locale.subjectedit.numberperweek.text" var="numberPerWeek" />
-	<fmt:message bundle="${loc}" key="locale.subjectedit.isnew.text" var="isNew" />
-	<fmt:message bundle="${loc}" key="locale.subjectedit.teacher.text" var="teacher" />
-	<fmt:message bundle="${loc}" key="locale.subjectedit.cost.text" var="cost" />
 	
-	<fmt:message bundle="${loc}" key="locale.subjectedit.any.text" var="any" />
-	<fmt:message bundle="${loc}" key="locale.subjectedit.boy.text" var="boy" />
-	<fmt:message bundle="${loc}" key="locale.subjectedit.girl.text" var="girl" />
-	<fmt:message bundle="${loc}" key="locale.subjectedit.morning.text" var="morning" />
-	<fmt:message bundle="${loc}" key="locale.subjectedit.noon.text" var="noon" />
-	<fmt:message bundle="${loc}" key="locale.subjectedit.evening.text" var="evening" />		
+	<fmt:message bundle="${loc}" key="locale.lessonedit.addlesson.text" var="addLesson" />
+	<fmt:message bundle="${loc}" key="locale.lessonedit.datelesson.text" var="dateLesson" />
+	<fmt:message bundle="${loc}" key="locale.lessonedit.subjectlesson.text" var="subjectLesson" />
+	<fmt:message bundle="${loc}" key="locale.lessonedit.teacherlesson.text" var="teacherLesson" />
+	<fmt:message bundle="${loc}" key="locale.lessonedit.grouplesson.text" var="groupLesson" />
+	<fmt:message bundle="${loc}" key="locale.lessonedit.periodstart.text" var="periodStart" />
+	<fmt:message bundle="${loc}" key="locale.lessonedit.periodend.text" var="periodEnd" />
+		
 	
-	<fmt:message bundle="${loc}" key="locale.subjectedit.button.addsubject.text" var="buttonAddSubject" />		
-	<fmt:message bundle="${loc}" key="locale.subjectedit.button.clear.text" var="buttonClear" />			
+	<fmt:message bundle="${loc}" key="locale.lessonedit.button.addlesson.text" var="buttonAddLesson" />		
+	<fmt:message bundle="${loc}" key="locale.lessonedit.button.clear.text" var="buttonClear" />			
 			
-	<fmt:message bundle="${loc}" key="locale.useredit.table.searchwhere.text" var="searchWhere" />	
-	<fmt:message bundle="${loc}" key="locale.useredit.table.searchwhat.text" var="searchWhat" />
-	<fmt:message bundle="${loc}" key="locale.useredit.table.search.text" var="search" />
-	<fmt:message bundle="${loc}" key="locale.useredit.table.role.text" var="role" />
-			
+	<fmt:message bundle="${loc}" key="locale.lessonedit.table.searchwhere.text" var="searchWhere" />	
+	<fmt:message bundle="${loc}" key="locale.lessonedit.table.searchwhat.text" var="searchWhat" />
+	<fmt:message bundle="${loc}" key="locale.lessonedit.table.search.text" var="search" />
+				
 	<fmt:message bundle="${loc}" key="locale.table.button.edit.text" var="buttonEdit" />
 	<fmt:message bundle="${loc}" key="locale.table.button.delete.text" var="buttonDelete" />	
 		
 	<fmt:message bundle="${loc}" key="locale.table.edit.text" var="edit" />
 	<fmt:message bundle="${loc}" key="locale.table.delete.text" var="delete" />
+	
+	<fmt:message bundle="${loc}" key="locale.lessonedit.dellesson.text" var="delLesson" />
+	<fmt:message bundle="${loc}" key="locale.lessonedit.selectsubject.text" var="selectSubject" />
+	<fmt:message bundle="${loc}" key="locale.lessonedit.selectteacher.text" var="selectTeacher" />
+	<fmt:message bundle="${loc}" key="locale.lessonedit.selectgroup.text" var="selectGroup" />
+	
 
 </head>
 <body>
@@ -83,30 +80,33 @@
 								
 				<div>
 					<label for="Subject">${subjectLesson}</label>
-					<select name="subject_lesson">
-								<option value="${morning}" selected>${morning}
-								<option value="${noon}" >${noon}
-								<option value="${evening}" >${evening}
-					</select> 	
-					
+					<select name="subject_id" >
+						<option selected disabled >${selectSubject}</option>
+							<c:forEach items="${subjects}" var="subject">
+								<option value="${subject.id}"}>
+									${subject.subjectName}</option>
+							</c:forEach>
+					</select>				
 				</div>	
 				
 				<div>
-					<label for="Teacher">${teachertLesson}</label>
-					<select name="teacherLesson">
-								<option value="${morning}" selected>${morning}
-								<option value="${noon}" >${noon}
-								<option value="${evening}" >${evening}
-					</select> 	
-					
+					<label for="Teacher">${teacherLesson}</label>
+					<select name="teacher_id" >
+						<option selected disabled >${selectTeacher}</option>
+							<c:forEach items="${teachers}" var="teacher">
+								<option value="${teacher.id}">
+									${teacher.name}</option>
+							</c:forEach>
+					</select> 					
 				</div>	
 				
 				<div>
 					<label for="group">${groupLesson}</label>
-					<select name="group_lesson">
-								<option value="${morning}" selected>${morning}
-								<option value="${noon}" >${noon}
-								<option value="${evening}" >${evening}
+					<select name="group_id">
+						<option selected disabled >${selectGroup}</option>
+								<option value="1" >1
+								<option value="2" >2
+								<option value="3" >3
 					</select> 	
 					
 				</div>	
@@ -125,56 +125,71 @@
 	
 				<form action="Controller" method='post'>
 				
-				<input type="hidden" name="command" value="lessons_search" />
+				<input type="hidden" name="command" value="lessons_edit" />
 				
-					Ищем по:<select name="searchtype">
-								<option value="xxxx" selected>Предмету
-								<option value="id" >Учителю
-								<option value="xxxx" >Дате							
-								<option value="login" >Ребенку
+					${searchWhere}: <select name="searchtype">
+								<option value="subjects.name_subject" selected>${subjectLesson}
+								<option value="date_lesson" >${dateLesson}
+								<option value="users.name" >${teacherLesson}							
+								<option value="child" >${child}
 							
 							</select> 
-					Что ищем:<input name="searchterm" value=""> 
-					<input type="submit" value="Поиск">
+					${searchWhat}: <input name="searchterm" value=""> 
+					
+					<fieldset>						
+					<label for="date_start">${periodStart}</label>
+					<input name="date_start" type="date" >
+					<label for="date_end">${periodEnd}</label>
+					<input name="date_end" type="date">								
+					</fieldset>
+					
+					<input type="submit" name="search" value="${search}">
 				</form>	
 	
 	<table class="table_blur" border="3">
 		<tr>
 			<th style="width: 20px;">ID</th>
-			<th>${dataLesson}</th>
+			<th>${dateLesson}</th>
 			<th>${subjectLesson}</th>
 			<th>${teacherLesson}</th>
 			<th>${groupLesson}</th>
+			<th>${buttonEdit}</th>
+			<th>${buttonDelete}</th>
 			
 		</tr>
 
-		<c:forEach items="${lesson}" var="lessons">
+		<c:forEach items="${lessons}" var="lesson">
 			<tr>
 				<form action="Controller" method='post'>				
 				<input type="hidden" name="command" value="lessons_edit" />	
 							
 					<td><input style="width: 40px;" name="id" value="${lesson.id}" /></td>	
-					<td><input type="date" name="date_lesson" value="${lesson.date}" /></td>
+					<td><input type="date" name="date_lesson" value="${lesson.date}" /></td>				
 					
-					<td><select name="subject_lesson">
-								<option selected value="${{lesson.subject}">${{lesson.subject}</option>
-								<option value="Any">${any}
-								<option value="Boy" >${boy}
-								<option value="Girl" >${girl}								
-					</select></td> 
+					<td><select name="subject_id" >
+							<c:forEach items="${subjects}" var="subject">
+								<option value="${subject.id}"
+									${subject.id == lesson.subjectID?"selected":""}>
+									${subject.subjectName}</option>
+							</c:forEach>
+					</select></td>
 					
-					<td><select name="teacher_lesson">
-								<option selected value="${{lesson.teacher}">${{lesson.teacher}</option>
-								<option value="Any">${any}
-								<option value="Boy" >${boy}
-								<option value="Girl" >${girl}								
-					</select></td> 
+					<td><select name="teacher_id" >
+							<c:forEach items="${teachers}" var="teacher">
+								<option value="${teacher.id}"
+									${teacher.id == lesson.teacherID?"selected":""}>
+									${teacher.name}</option>
+							</c:forEach>
+					</select></td>
 					
-					<td><select name="group_lesson">
-								<option selected value="${{lesson.group}">${child.group}</option>
-								<option value="Any">${any}
-								<option value="Boy" >${boy}
-								<option value="Girl" >${girl}								
+					
+				
+					
+					<td><select name="group_id">
+								<option selected value="${lesson.groupID}">${lesson.groupID}</option>
+								<option value="1" >1
+								<option value="2" >2
+								<option value="3" >3								
 					</select></td> 
 									
 					

@@ -23,10 +23,10 @@ public class Validator {
 		return errors;
 	}
 
-	private static final String PATTERN_PASSWORD = "^[1-9a-zA-Zа-яА-ЯёЁ]{3,15}$";
+	private static final String PATTERN_PASSWORD = "^[1-9a-zA-Z]{5,15}$";
 	private static final String PATTERN_EMAIL = "^([a-z0-9_-]+\\.)*[a-z0-9_-]+@[a-z0-9_-]+(\\.[a-z0-9_-]+)*\\.[a-z]{2,6}$";
-	private static final String PATTERN_LOGIN = "^[A-Za-z0-9_]{5,15}$";
-	private static final String PATTERN_NAME = "^[a-zA-Zа-яА-ЯёЁ]{3,15}$";
+	private static final String PATTERN_LOGIN = "^[A-Za-z0-9_]{3,15}$";
+	private static final String PATTERN_NAME = "^[a-zA-Zа-яА-ЯёЁ ]{2,25}$";
 
 	public boolean hasValidationErrors() {
 		return !errors.isEmpty();
@@ -36,7 +36,7 @@ public class Validator {
 		errors.add(error);
 	}
 
-	public static boolean validateLengthPassword(String password) { // ----------------
+	public static boolean validateLengthPassword(String password) {
 		return password.length() > 5;
 	}
 
@@ -50,12 +50,13 @@ public class Validator {
 	}
 
 	public static boolean validateLogin(String login) {
-		logger.debug("Validate Login: " + login);
+		logger.info("Validate Login: " + login);
 		if (!validateString(login)) {
 			return false;
 		}
 		pattern = Pattern.compile(PATTERN_LOGIN);
 		matcher = pattern.matcher(login);
+		logger.info("Validate Login:  {} " + matcher.matches());
 		return matcher.matches();
 	}
 
@@ -89,10 +90,10 @@ public class Validator {
 		return matcher.matches();
 	}
 
-	public static boolean validateLessonDate(Date departureDate) {
+	public static boolean validateLessonDate(Date lessonDate) {
 		Date nowDate = new Date();
-		logger.debug("Validate order date: " + (nowDate.before(departureDate)));
-		return nowDate.before(departureDate);
+		logger.debug("Validate lesson date: " + (nowDate.before(lessonDate)));
+		return nowDate.before(lessonDate);
 	}
 
 }

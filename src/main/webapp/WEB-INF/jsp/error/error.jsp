@@ -35,11 +35,10 @@
 
 	<jsp:include page="../include/header.jsp"></jsp:include>
 
-	<br><br><br><br><br>        
-
-              <h1><fmt:message key="oops"/></h1>
-              <h2><fmt:message key="${requestScope.errorTitle}"/></h2>              
-              <fmt:message key="${requestScope.errorMessage}"/>           
+	<br><br><br><br><br>      
+	           
+            <h3><fmt:message key="${requestScope.errorAccessMessage}"/></h3> 
+             <h3><fmt:message key="${requestScope.errorMessage}"/></h3>        
 
 
 	<jsp:include page="../include/footer.jsp"></jsp:include>

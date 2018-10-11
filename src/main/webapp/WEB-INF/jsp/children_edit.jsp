@@ -55,64 +55,45 @@
 		<jsp:include page="include/header.jsp"></jsp:include>
 		<br><br><br><br><br><br>
 
-	<div class="form">	
+	<div class="form">
 		<form action="Controller" method='post'>
-			<fieldset>				
+			<fieldset>
 				<legend>${addChild}</legend>
-				
-				<input type="hidden" name="command" value="children_edit" />	
-					
+
+				<input type="hidden" name="command" value="children_edit" />
+
 				<div>
-					<label for="Name">${nameChild}</label>
-					<input type="text" name="name_child" value="" />
+					<label for="Name">${nameChild}</label> <input type="text"
+						name="name_child" value="" />
 				</div>
-								
+
 				<div>
-					<label for="surname">${surnameChild}</label>
-					<input type="text" name="surname_child" value="" />
+					<label for="surname">${surnameChild}</label> <input type="text"
+						name="surname_child" value="" />
 				</div>
-				
+
 				<div>
-					<label for="BirthChild">${birthChild}</label>
-					<input type="date" name="birth_child" />
+					<label for="BirthChild">${birthChild}</label> <input type="date"
+						name="birth_child" />
 				</div>
-				
-				<div>
-					<label for="Parent">${parentChild}</label>
-					<select name="parent_child">
-								<option value="1" selected>1
-								<option value="4" >4
-								<option value="6" >6
-					</select> 	
-					
-				</div>					
-							
-							
-				<input type="submit" name="create" value="${buttonAddChild}" />
+
+				<label for="Parent">${parentChild}</label> <select
+					name="parent_child">
+					<option selected disabled>${selectParent}</option>
+					<c:forEach items="${parents}" var="parent">
+						<option value="${parent.id}">${parent.name}</option>
+					</c:forEach>
+				</select>
+	</div>
+
+
+	<input type="submit" name="create" value="${buttonAddChild}" />
 				<div><input type="reset" value="${buttonClear}"></div>
 				
 			</fieldset>
 		</form>
 	</div>	
 	
-	
-	
- 
-	
-				<form action="Controller" method='post'>
-				
-				<input type="hidden" name="command" value="children_search" />
-				
-					Ищем по:<select name="searchtype">
-								<option value="xxxx" selected>Имени
-								<option value="id" >Фамилии
-								<option value="xxxx" >Дате рождения							
-								<option value="login" >Родителю
-							
-							</select> 
-					Что ищем:<input name="searchterm" value=""> 
-					<input type="submit" value="Поиск">
-				</form>	
 	
 	<table class="table_blur" border="3">
 		<tr>
@@ -135,11 +116,12 @@
 					<td><input type="text" name="name_child" value="${child.name}" /></td>
 					<td><input type="text" name="surname_child" value="${child.surname}" /></td>	
 					<td><input type="date" name="birth_child" value="${child.dateOfBirth}" /></td>														
-					<td><select name="parent_child">
-								<option selected value="${child.parentID}">${child.parentID}</option>
-								<option value="Any">${any}
-								<option value="Boy" >${boy}
-								<option value="Girl" >${girl}								
+					<td><select name="parent_child" >
+							<c:forEach items="${parents}" var="parent">
+								<option value="${parent.id}"
+									${parent.id == child.parentID?"selected":""}>
+									${parent.name}</option>
+							</c:forEach>
 					</select></td> 
 									
 					

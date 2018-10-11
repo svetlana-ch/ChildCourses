@@ -40,42 +40,33 @@ public class SignUp implements Command{
 		email = request.getParameter(EMAIL_PARAM_NAME);
 		
 		ServiceFactory factory = ServiceFactory.getInstance();
-		UserService userService = factory.getUserService();
-		System.out.println("SIGN_UP1=");
-		System.out.println(LOGIN_PARAM_NAME);
-		System.out.println(login + "    Это логин");
-		System.out.println("логин ==   " + login);
-		System.out.println("пароль  ==     " + password);
-		System.out.println("e-mail ==     " + email);
-		User user = null;
-			
+		UserService userService = factory.getUserService();		
+		User user = null;			
 		String goToPage = null;		
 		
-		try {			
-			user = userService.signup(name, login, email, password);
-			if(user != null){
-				//request.getSession(true).setAttribute("user", user);// можно не открывать сессию сразу, а попросить зайти
-				System.out.println("SIGN_UP2="+ user);
-				goToPage = JSPPagePath.MAIN_PAGE;
-			}else{
-				request.setAttribute("errorRegistrationMessage", "User is not created. Incorrect login or password.");
-				logger.error("registration error");
-				goToPage = JSPPagePath.SIGN_UP;
+		try {
+			if (request.getMethod().toUpperCase().equals("POST")) {
+				user = userService.signup(name, login, email, password);
+				if (user != null) {
+					 request.getSession(true).setAttribute("user", user);					
+					goToPage = JSPPagePath.MAIN_PAGE;
+				} else {
+					request.setAttribute("errorRegistrationMessage", "User is not created.");
+					logger.error("registration error");
+					goToPage = JSPPagePath.SIGN_UP;
+				}
 			}
-			
-		} catch (ServiceException e) {
-			
-			//goToPage = JSPPagePath.ERROR_PAGE;
+
+		} catch (ServiceException e) {			
+            request.setAttribute("errorMessage", e.getMessage());
 			logger.error("registration exception", e);
-			goToPage = JSPPagePath.SIGN_UP;// change to error 
+			logger.error("error      {}", e.getMessage());
+			goToPage = JSPPagePath.SIGN_UP;
 			
 		}	
-
 		
-		RequestDispatcher dispatcher = request.getRequestDispatcher(goToPage);
-		
-		dispatcher.forward(request, response);			
-		
+		RequestDispatcher dispatcher = request.getRequestDispatcher(goToPage);		
+		dispatcher.forward(request, response);				
 		
 	}
 

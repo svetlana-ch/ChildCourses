@@ -23,12 +23,6 @@
     <link href="assets/css/main.css" rel="stylesheet">
     
     
-    <fmt:setLocale value="${sessionScope.local}" />
-	<fmt:setBundle basename="locale" var="loc" />	
-	
-	<fmt:message bundle="${loc}" key="local.error500.title.text" var="500title" />
-	<fmt:message bundle="${loc}" key="local.error500.massage.text" var="500massage" />
-
 </head>
 
 <body>
@@ -37,16 +31,11 @@
 
 	<br><br><br><br><br>
 	
-		<h1>
-			<fmt:message key="oops" />
-		</h1>
+		
 		<h2>
-			<fmt:message key="500.title" />
+			500 Internal Server Error
 		</h2>
-		<div class="error-details">
-			<fmt:message key="500.message" />
-		</div>
-
+		
 
 		<jsp:include page="../include/footer.jsp"></jsp:include>
 

@@ -1,12 +1,12 @@
 package by.htp.courses.dao.impl;
 
-import java.sql.Array;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -15,22 +15,37 @@ import org.slf4j.LoggerFactory;
 import by.htp.courses.dao.LessonDAO;
 import by.htp.courses.dao.connectionpool.ConnectionPool;
 import by.htp.courses.dao.exception.DAOException;
-import by.htp.courses.domain.Child;
 import by.htp.courses.domain.Lesson;
-import by.htp.courses.domain.Subject;
-import by.htp.courses.domain.User;
 
 public class SQLLessonDAO implements LessonDAO{
 
 	private static final Logger logger = LoggerFactory.getLogger(SQLLessonDAO.class);
 	
-	private final static String CREATE_LESSON = "INSERT into lessons (name_lesson, age_child_from, age_child_to, sex_child, time_spending, number_per_week, is_new, cost)"
-			+ " values(?, ?, ?, ?, ?, ?, ?, ?)";
+	private final static String CREATE_LESSON = "INSERT into lessons (date_lesson, id_subject, id_teacher, id_group) values(?, ?, ?, ?)";
 	private final static String GET_ALL_LESSONS = "SELECT * FROM lessons";
-	private final static String UPDATE_LESSON = "UPDATE `courses`.`lessons` SET `name_lesson`=?, `age_child_from`=?, `age_child_to`=?, `sex_child`=?, `time_spending`=?, `number_per_week`=?, `is_new`=?, `cost`=? WHERE `id`=?;";
-			
-	private static final String DELETE_LESSON = "DELETE FROM lessons WHERE id=?";
+	private final static String UPDATE_LESSON = "UPDATE `courses`.`lessons` SET `date_lesson`=?, `id_subject`=?, `id_teacher`=?, `id_group`=? WHERE `id_lesson`=?;";			
+	private final static String DELETE_LESSON = "DELETE FROM lessons WHERE id_lesson=?";
+	private final static String GET_ALL_LESSONS_SEARCH = "SELECT lessons.id_lesson, lessons.date_lesson, lessons.id_subject, lessons.id_teacher, lessons.id_group, subjects.id, subjects.name_subject, users.id, users.name "
+			+ "FROM lessons\n "
+			+ "JOIN subjects\n"
+			+ "ON lessons.id_subject = subjects.id\n"
+			+ "JOIN users\n"
+			+ "ON users.id = lessons.id_teacher\n"
+			+ "WHERE users.role = 'TEACHER' AND" ;
+	private final static String GET_ALL_LESSONS_SEARCH1 = "SELECT lessons.id_lesson, lessons.date_lesson, lessons.id_subject, lessons.id_teacher, lessons.id_group, subjects.id, subjects.name_subject, users.id, users.name "
+			+ "FROM lessons\n "
+			+ "JOIN subjects\n"
+			+ "ON lessons.id_subject = subjects.id\n"
+			+ "JOIN users\n"
+			+ "ON users.id = lessons.id_teacher\n"
+			+ "WHERE users.role = 'TEACHER' AND ? like ? AND lessons.date_lesson BETWEEN ? AND ?" ;
 	
+	
+	
+	
+
+							
+											
 	@Override
 	public boolean create(Lesson lesson) throws DAOException {
 		Connection connection = null;
@@ -45,10 +60,10 @@ public class SQLLessonDAO implements LessonDAO{
 			
 			preparedStatment = connection.prepareStatement(CREATE_LESSON);
 			
-			preparedStatment.setDate(1, (java.sql.Date) lesson.getDate());
-			preparedStatment.setObject(2, lesson.getSubject());
-			preparedStatment.setObject(3, lesson.getTeacher());
-			preparedStatment.setArray(4, (Array) lesson.getGroup());
+			preparedStatment.setDate(1, Date.valueOf(lesson.getDate()));
+			preparedStatment.setInt(2, lesson.getSubjectID());
+			preparedStatment.setInt(3, lesson.getTeacherID());
+			preparedStatment.setInt(4, lesson.getGroupID());
 									
 			countRows = preparedStatment.executeUpdate();	
 					
@@ -92,17 +107,11 @@ public class SQLLessonDAO implements LessonDAO{
 			
 			while (rs.next()) {
 				Lesson lesson = new Lesson();
-				lesson.setId(rs.getInt("id"));
-				lesson.setDate(rs.getDate("date_lesson"));
-				lesson.setSubject((Subject) rs.getObject("subject"));
-				lesson.setTeacher((User) rs.getObject("teacher"));
-				lesson.setGroup((List<Child>) rs.getArray("group"));
-				
-				
-				preparedStatment.setDate(1, (java.sql.Date) lesson.getDate());
-				preparedStatment.setObject(2, lesson.getSubject());
-				preparedStatment.setObject(3, lesson.getTeacher());
-				preparedStatment.setArray(4, (Array) lesson.getGroup());
+				lesson.setId(rs.getInt("id_lesson"));
+				lesson.setDate(rs.getDate("date_lesson").toLocalDate());
+				lesson.setSubjectID(rs.getInt("id_subject"));
+				lesson.setTeacherID(rs.getInt("id_teacher"));
+				lesson.setGroupID(rs.getInt("id_group"));			
 				
 				lessons.add(lesson);	
 			}
@@ -129,12 +138,15 @@ public class SQLLessonDAO implements LessonDAO{
 		
 		try {
 			connection = conPool.takeConnection();					
-			preparedStatment = connection.prepareStatement(UPDATE_LESSON);			
-
-			preparedStatment.setDate(1, (java.sql.Date) lesson.getDate());
-			preparedStatment.setObject(2, lesson.getSubject());
-			preparedStatment.setObject(3, lesson.getTeacher());
-			preparedStatment.setArray(4, (Array) lesson.getGroup());
+			preparedStatment = connection.prepareStatement(UPDATE_LESSON);	
+			
+			preparedStatment.setDate(1, Date.valueOf(lesson.getDate()));
+			preparedStatment.setInt(2, lesson.getSubjectID());
+			preparedStatment.setInt(3, lesson.getTeacherID());
+			preparedStatment.setInt(4, lesson.getGroupID());
+			preparedStatment.setInt(5, lesson.getId());
+			
+			logger.info("lesson {} is !!!!!!!!!!!!!!!!!!!!!d", lesson.getDate());
 			
 			countRows = preparedStatment.executeUpdate();	
 			
@@ -182,9 +194,52 @@ public class SQLLessonDAO implements LessonDAO{
 	}
 
 	@Override
-	public List<Lesson> search(String where, String what) throws DAOException {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Lesson> search(String where, String what, LocalDate date_start, LocalDate date_end) throws DAOException {
+		String WHERE = " " +  where +  " like '%" + what + "%' AND lessons.date_lesson BETWEEN '" + date_start + "' AND '" + date_end +"'";		
+		Connection connection = null;
+		PreparedStatement preparedStatment = null;
+		ConnectionPool conPool = ConnectionPool.getInstance();
+		String sql = null;
+		ResultSet rs = null;
+		
+		List<Lesson> lessons = new ArrayList<>();
+		
+		 try {
+		    	connection = conPool.takeConnection();
+				sql = GET_ALL_LESSONS_SEARCH + WHERE;
+										
+				preparedStatment = connection.prepareStatement(sql);				
+				
+				logger.info("where ==  {}    what == {}   ", where, what);
+				logger.info("sql ==  {}", sql);	
+				logger.info("PS =====     {}", preparedStatment);
+
+				rs = preparedStatment.executeQuery();
+				logger.info("RS =====     {}", rs);
+				
+				while (rs.next()) {
+					Lesson lesson = new Lesson();
+					lesson.setId(rs.getInt("id_lesson"));
+					lesson.setDate(rs.getDate("date_lesson").toLocalDate());
+					lesson.setSubjectID(rs.getInt("id_subject"));
+					lesson.setTeacherID(rs.getInt("id_teacher"));
+					lesson.setGroupID(rs.getInt("id_group"));			
+					
+					lessons.add(lesson);	
+				}
+				
+			} catch (InterruptedException e) {
+				logger.error("InterruptedException search() {}", e);	
+				throw new DAOException("InterruptedException ", e);
+			} catch (SQLException e) {
+				logger.error("Exception in SQLlessonDAO search() {} ", e);			
+				throw new DAOException("Exception in SQLlessonDAO search()", e);
+			} finally {
+				closeResources(rs, preparedStatment, connection);
+			}
+		 
+		       return lessons;
+	
 	}
 	
 	private void closeResources(AutoCloseable... resources) throws DAOException {

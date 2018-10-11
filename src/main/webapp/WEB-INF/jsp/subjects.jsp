@@ -44,44 +44,17 @@
 	<div class="container w">
 		<div class="row centered">
 			<br><br>
+			
+			<c:forEach items="${subjects}" var="subject">
 			<div class="col-lg-4">
 				<i class="fa fa-desktop"></i>
-				<h4>WEB DESIGN</h4>
-				<p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form.</p>
+				<h4>${subject.subjectName}</h4>				
+				<h3>${subject.cost} рублей</h3>
+				<h3>от ${subject.ageChildFrom}</h3>
+				<h3>до ${subject.ageChildTo} лет</h3>
+				<br><br>				
 			</div><!-- col-lg-4 -->
-
-			<div class="col-lg-4">
-				<i class="fa fa-cogs"></i>
-				<h4>WEB DEVELOPMENT</h4>
-				<p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form.</p>
-			</div><!-- col-lg-4 -->
-
-			<div class="col-lg-4">
-				<i class="fa fa-eye"></i>
-				<h4>SEO SERVICES</h4>
-				<p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form.</p>
-			</div><!-- col-lg-4 -->
-		</div><!-- row -->
-		<br>
-		<div class="row centered">
-			<br><br>
-			<div class="col-lg-4">
-				<i class="fa fa-heart"></i>
-				<h4>SOCIAL MEDIA</h4>
-				<p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form.</p>
-			</div><!-- col-lg-4 -->
-
-			<div class="col-lg-4">
-				<i class="fa fa-shopping-cart"></i>
-				<h4>E-COMMERCE</h4>
-				<p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form.</p>
-			</div><!-- col-lg-4 -->
-
-			<div class="col-lg-4">
-				<i class="fa fa-cloud"></i>
-				<h4>CLOUD SERVICES</h4>
-				<p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form.</p>
-			</div><!-- col-lg-4 -->
+			</c:forEach>			
 		</div><!-- row -->
 	</div><!-- container -->
 

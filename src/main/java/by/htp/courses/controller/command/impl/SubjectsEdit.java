@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import by.htp.courses.controller.command.Command;
 import by.htp.courses.domain.Subject;
+import by.htp.courses.domain.User;
 import by.htp.courses.service.ServiceFactory;
 import by.htp.courses.service.SubjectService;
 import by.htp.courses.service.exception.ServiceException;
@@ -33,30 +34,29 @@ public class SubjectsEdit implements Command{
 	private static final String UPDATE_PARAM_NAME = "update";
 	private static final String DELETE_PARAM_NAME = "delete";
 	private static final String CREATE_PARAM_NAME = "create";
+	private static final String POST = "POST";
 	
 	
-	
-	//private static final String SEARCHTYPE_PARAM_NAME = "searchtype";
-	//private static final String SEARCHTERM_PARAM_NAME = "searchterm";	
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		if (! ((User) request.getSession().getAttribute("user")).getRole().equals("ADMIN") ) {		
+			request.setAttribute("errorAccessMessage", "Вам необходимо войти либо зарегистрироваться!");			
+			request.getRequestDispatcher(JSPPagePath.ERROR_PAGE).forward(request, response);
+            return;
+		}
 				
-				
-		//searchtype = request.getParameter(SEARCHTYPE_PARAM_NAME);
-		//searchterm = request.getParameter(SEARCHTERM_PARAM_NAME);
 		
 		ServiceFactory factory = ServiceFactory.getInstance();
-		SubjectService subjectService = factory.getSubjectService();
-		
-		System.out.println("Мы в  SublectsEdit.java");
+		SubjectService subjectService = factory.getSubjectService();		
 
 		List<Subject> subjects = null;
 		Subject subject = null;			
 		String goToPage = null;	
 				
 		try {				
-			if (request.getMethod().toUpperCase().equals("POST")) {
+			if (request.getMethod().toUpperCase().equals(POST)) {
 				
 				
 				//if (request.getParameter(CREATE_PARAM_NAME) != null) {					
@@ -84,15 +84,10 @@ public class SubjectsEdit implements Command{
 					subjectService.create(subject);
 					goToPage = JSPPagePath.SUBJECTS_EDIT;
 				//}
-				}
-
-				
-				
+				}			
 				
 				if (request.getParameter(UPDATE_PARAM_NAME) != null) {
-					int id = Integer.parseInt(request.getParameter(ID_PARAM_NAME));
-					String id222 = request.getParameter("id");
-					System.out.println("НАЖАЛИ НА UPDATE     " + id222);// проверка ip в текстовом формате
+					int id = Integer.parseInt(request.getParameter(ID_PARAM_NAME));					
 
 					subject = new Subject();	
 					subject.setId(id);
@@ -115,9 +110,7 @@ public class SubjectsEdit implements Command{
 					int id = Integer.parseInt(request.getParameter(ID_PARAM_NAME));
 
 					subjectService.delete(id);
-					System.out.println(
-							"НАЖАЛИ НА DELETE  id==   " + id );
-
+					
 					goToPage = JSPPagePath.SUBJECTS_EDIT;
 				}
 			}
@@ -126,18 +119,18 @@ public class SubjectsEdit implements Command{
 			
           subjects =  subjectService.getAll();		
 			if(subjects != null){
-				request.getSession(true).setAttribute("subjects", subjects);			
+				 request.setAttribute("subjects", subjects);			
 				goToPage = JSPPagePath.SUBJECTS_EDIT;
 			}else{
 				request.setAttribute("errorMessage", "Предметов нет");
-				goToPage = JSPPagePath.SUBJECTS_EDIT;//поменять на ошибку??
+				goToPage = JSPPagePath.SUBJECTS_EDIT;
 			}	
 			goToPage = JSPPagePath.SUBJECTS_EDIT;		
 			
 		} catch (ServiceException e) {
-			//goToPage = JSPPagePath.ERROR_PAGE;
-			// log
-			e.printStackTrace();
+			request.setAttribute("errorMessage", "error");
+			goToPage = JSPPagePath.ERROR_PAGE;
+			logger.error("ServiceException  {}", e);
 		}		
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher(goToPage);		

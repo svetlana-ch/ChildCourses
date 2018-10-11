@@ -22,11 +22,6 @@ public class SignOut implements Command{
 	            response.sendRedirect("index.jsp");
 	       
 		
-			
-		//RequestDispatcher dispatcher = request.getRequestDispatcher(JSPPagePath.MAIN_PAGE);
-		//dispatcher.forward(request, response);
-		
-
 		
 	}
 

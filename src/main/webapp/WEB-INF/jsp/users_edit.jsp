@@ -59,7 +59,7 @@
 
 		<jsp:include page="include/header.jsp"></jsp:include>
 
-		<br><br><br><br><br>
+		<br><br><br><br><br><br>
 
 
 		<div class="form signup">
@@ -68,39 +68,54 @@
 			<fieldset>				
 				<legend>${addUser}</legend>
 				
-				<input type="hidden" name="command" value="sign_up" />	
+				<input type="hidden" name="command" value="users_edit" />	
 					
 				<div>
 					<label for="Name">${surnameName}</label>
-					<input type="text" name="name" value="" />
-				</div>
+					<input type="text" name="name"  />
+					<span style="color: #ff0000;">
+					 	<c:if	test="${requestScope.errorMessage.contains('Invalid_name')}">
+							<c:out value="${invalidName}" />
+						</c:if>
+					</span>					
+				</div>					
 					
 				<div>
-					<label for="Login">${login}</label>
-					<input type="text" name="login" value="" />
+					<label for="Login">${login}</label>					
+					<input type="text" name="login"  />
+					<span style="color: #ff0000;">
+					 	<c:if	test="${requestScope.errorMessage.contains('Login_is_not_free')}">
+							<c:out value="${notFree}" />
+						</c:if>
+					</span>
+					<span style="color: #ff0000;">
+					 	<c:if	test="${requestScope.errorMessage.contains('Invalid_login')}">
+							<c:out value="${invalidLogin}" />
+						</c:if>
+					</span>
 				</div>
 				
 				<div>
 					<label for="e-mail">E-mail</label>
-					<input type="text" name="e-mail" value="" />
+					<input type="text" id="email" name="e-mail" />
+					<span style="color: #ff0000;">
+					 	<c:if	test="${requestScope.errorMessage.contains('Invalid_email')}">
+							<c:out value="${invalidEmail}" />
+						</c:if>
+					</span>
 				</div>
 				
 				<div>				
-					<label for="Password">${password}</label>
-					<input type="password" name="password" value="" />
+					<label for="Password">${password}</label>					
+					<input type="password" id="inputPassword" name="password"  />
+					<span style="color: #ff0000;">
+					 	<c:if	test="${requestScope.errorMessage.contains('Invalid_password')}">
+							<c:out value="${invalidPassword}" />
+						</c:if>
+					</span>
 				</div>	
-				
-				<!--  
-    <c:if test="${isLoginTaken == true}">
-        <p style="color: #FF0000;" align="center">${login_error}</p>
-    </c:if>
-
-    <c:if test="${isLoginTaken == false}">
-        <p style="color: #FF0000;" align="center">${error}</p>
-    </c:if>
-				-->		
 							
-				<div><input type="submit" value="${buttonAddUser}" /></div>
+				<div><input type="submit" name="create" value="${buttonAddUser}" /></div>
 				<div><input type="reset" value="${buttonClear}"></div>          
 				
 			</fieldset>
@@ -127,7 +142,7 @@
 	
 	<table class="table_blur" border="3">
 		<tr>
-			<th width="auto">ID</th>
+			<th width="30px">ID</th>
 			<th>${surnameName}</th>
 			<th>e-mail</th>
 			<th>${role}</th>
@@ -142,10 +157,11 @@
 
 				<form action="Controller" method='post'>
 				
-				<input type="hidden" name="command" value="users_edit" />	
+				<input type="hidden" name="command" value="users_edit" />
+				<input type="hidden"  name="id" value="${user.id}"  />	
 		
 				
-					<td><input name="id" value="${user.id}" /></td>								
+					<td>${user.id}</td>								
 					<td><input type="text" name="name" value="${user.name}" /></td>
 					<td><input type="text" name="e-mail" value="${user.email}" /></td>
 					                      
@@ -180,10 +196,50 @@
 
 
 
+	<c:if test="${noOfPages>1}">
+		<ul class="pagination pagination-sm">
+			<c:set var="begin" value="1" />
+			<c:set var="end" value="${noOfPages}" />
+			<c:if test="${currentPage-5 gt begin}">
+				<c:set var="begin" value="${currentPage-5}" />
+			</c:if>
+			<c:if test="${currentPage+5 lt end}">
+				<c:set var="end" value="${currentPage+5}" />
+			</c:if>
 
-        
-        
-        
+
+			<c:if test="${currentPage != 1}">
+				<li><a
+					href="Controller?command=users_edit&page=${currentPage-1}">Prev</a></li>
+			</c:if>
+
+			<c:forEach var="i" begin="${begin}" end="${end}">
+				<c:choose>
+					<c:when test="${currentPage eq i}">
+						<c:set var="isActive" value="active" />
+						<li class="${isActive}"><a href="">${i}</a></li>
+					</c:when>
+					<c:otherwise>
+						<c:set var="isActive" value="" />
+						<li class=""><a
+							href="Controller?command=users_edit&page=${i}">${i}</a></li>
+					</c:otherwise>
+				</c:choose>
+			</c:forEach>
+
+			<c:if test="${currentPage lt noOfPages}">
+				<li><a
+					href="Controller?command=users_edit&page=${currentPage+1}">Next</a></li>
+			</c:if>
+		</ul>
+	</c:if>
+
+
+
+
+
+
+
 
 
 

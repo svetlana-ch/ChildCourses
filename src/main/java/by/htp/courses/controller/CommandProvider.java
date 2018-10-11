@@ -8,6 +8,8 @@ import by.htp.courses.controller.command.impl.ChildrenEdit;
 import by.htp.courses.controller.command.impl.LessonsEdit;
 import by.htp.courses.controller.command.impl.Localization;
 import by.htp.courses.controller.command.impl.MainPage;
+import by.htp.courses.controller.command.impl.ProfileEdit;
+import by.htp.courses.controller.command.impl.ProfileEditPage;
 import by.htp.courses.controller.command.impl.SignIn;
 import by.htp.courses.controller.command.impl.SignOut;
 import by.htp.courses.controller.command.impl.SignUp;
@@ -35,7 +37,10 @@ class CommandProvider {
 		commands.put(CommandName.SUBJECTS_PAGE, new SubjectsPage());
 		commands.put(CommandName.SIGN_UP_PAGE, new SignUpPage());
 		commands.put(CommandName.CHILDREN_EDIT, new ChildrenEdit());
-		commands.put(CommandName.LESSONS_EDIT, new LessonsEdit());
+		commands.put(CommandName.LESSONS_EDIT, new LessonsEdit());		
+		commands.put(CommandName.PROFILE_EDIT, new ProfileEdit());
+		commands.put(CommandName.PROFILE_EDIT_PAGE, new ProfileEditPage());		
+		
 	}
 
 	Command getCommand(String commandName) {

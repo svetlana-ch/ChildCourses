@@ -26,7 +26,7 @@
     <fmt:setLocale value="${sessionScope.local}" />
 	<fmt:setBundle basename="locale" var="loc" />	
 	
-	<fmt:message bundle="${loc}" key="local.error404.text" var="pageNotFound" />
+	<fmt:message bundle="${loc}" key="local.error405.text" var="pageNotAllowed" />
 
 </head>
 
@@ -36,7 +36,7 @@
 
 	<br><br><br><br><br>
 
-        <h2><strong>${pageNotFound} &nbsp;</strong></h2>            
+        <h2><strong>${pageNotAllowed} &nbsp;</strong></h2>            
 
 
 	<jsp:include page="../include/footer.jsp"></jsp:include>

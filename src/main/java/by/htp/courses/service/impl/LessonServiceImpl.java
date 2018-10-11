@@ -1,5 +1,6 @@
 package by.htp.courses.service.impl;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -85,9 +86,20 @@ public class LessonServiceImpl implements LessonService {
 	}
 
 	@Override
-	public List<Lesson> search(String where, String what) throws ServiceException {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Lesson> search(String where, String what, LocalDate date_start, LocalDate date_end) throws ServiceException {
+		DAOFactory factory = DAOFactory.getInstance();
+		LessonDAO dao = factory.getLessonDAO();
+		List<Lesson> lessons = null;
+		
+		
+		try {
+			lessons = dao.search(where, what, date_start, date_end);
+		} catch (DAOException e) {
+			logger.error("DAOException in search lessons");
+			throw new ServiceException("DAOException in search lessons", e);
+		}
+					
+		return lessons;
 	}
 
 }

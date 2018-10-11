@@ -18,7 +18,7 @@ public class SignUpPage implements Command{
 		try {
 			dispatcher.forward(request, response);
 		} catch (ServletException | IOException e) {
-			//log ?????????????
+			
 		}
 		
 	}

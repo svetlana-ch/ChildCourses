@@ -16,42 +16,10 @@ public class UserServiceImpl implements UserService{
 	
 	private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 	
-	/*public UserDTO logination(User user) throws ServiceException {
-		if (!validation(user)) {
-			return null;
-		}
-		try {
-			user = userDAO.find(user);
-			return user == null ? null : new UserDTO(user);
-		} catch (DAOException e) {
-			throw new ServiceException(e);
-		}
-	}
-
-	@Override
-	public boolean registration(User user) throws ServiceException {
-		if (!validation(user)) {
-			return false;
-		}
-		try {
-			return userDAO.save(user);
-		} catch (DAOException e) {
-			throw new ServiceException(e);
-		}
-	} */
-	
-	
-	
+		
 	@Override
 	public User signin(String login, String password) throws ServiceException {
-		
-	/*	if (!Validator.validateLogin(login)) {
-            throw new ServiceException("Wrong login");
-        }
-        if (!Validator.validatePassword(password)) {
-            throw new ServiceException("Wrong password");
-        }		
-	*/					
+							
 		DAOFactory factory = DAOFactory.getInstance();
 		UserDAO dao = factory.getUserDAO();		
 		
@@ -70,49 +38,54 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public User signup(String name, String login, String email, String password) throws ServiceException {
 		
-		/*if (!Validator.validateLogin(login)) {
-			logger.info("логин   пустой или не соответствует");
-            throw new ServiceException("Invalid login");
-        }
-        if (!Validator.validatePassword(password)) {
-            throw new ServiceException("Invalid password");
-        }
-        if (!Validator.validateName(name)) {
-            throw new ServiceException("Invalid name");
-        }
-        if (!Validator.validateEmail(email)) {
-            throw new ServiceException("Invalid email");
-        }
-		*/
 		User user = null;
-
 		DAOFactory factory = DAOFactory.getInstance();
 		UserDAO dao = factory.getUserDAO();
-		logger.info("Crearing user in Service");
-
-		if (!checkLogin(login)) {
+		
+		if (checkLogin(login)) {
 			logger.info("checking login");
+			throw new ServiceException("Login_is_not_free");				
+		} 
+		
+		if (!Validator.validateLogin(login)) {
+			logger.info("Login is empty or does not match");			
+            throw new ServiceException("Invalid_login");
+        }
+       
+        if (!Validator.validateName(name)) {
+        	logger.info("Name is empty or  does not match");
+            throw new ServiceException("Invalid_name");
+        }
+        if (!Validator.validateEmail(email)) {
+        	logger.info("Email does not match");
+            throw new ServiceException("Invalid_email");
+        }
+		
+         if (!Validator.validatePassword(password)) {
+        	 logger.info("Password is empty or does not match"); 
+        	 throw new ServiceException("Invalid_password");
+    }
+		
+		logger.info("Crearing user in Service");
+		
 			try {
 				user = dao.createUser(name, login, email, password);
 			} catch (DAOException e) {
 				logger.info("User is not created");
 				throw new ServiceException("User is not created", e);
 			}
-		} else {
-			throw new ServiceException("Login is not free");			
-		}
+		
 		return user;
 	}
 
 	@Override
-	public List<User> getAll(String WHERE) throws ServiceException {
+	public List<User> getAll(int currentPage, int elementsOnPage) throws ServiceException {
 				
 		DAOFactory factory = DAOFactory.getInstance();
-		UserDAO dao = factory.getUserDAO();
-		
+		UserDAO dao = factory.getUserDAO();	
 		List<User> users = null;
 		try {			
-			users = dao.getAll(WHERE);			
+			users = dao.getAll(currentPage, elementsOnPage);			
 			
 		} catch (DAOException e) {
 			logger.error("DAOException in getAll users");
@@ -203,6 +176,38 @@ public class UserServiceImpl implements UserService{
 			throw new ServiceException("DAOExeption ", e);
 		}
 		return result;
+	}
+
+
+
+	@Override
+	public int getAllUsersCount() throws ServiceException {
+		DAOFactory factory = DAOFactory.getInstance();
+		UserDAO dao = factory.getUserDAO();
+		int result = 0;
+		
+		try {
+			result = dao.getAllUsersCount();
+		} catch (DAOException e) {
+			throw new ServiceException("DAOExeption ", e);
+		}
+		return result;
+	}
+
+
+
+	@Override
+	public User getUser(String login) throws ServiceException {
+		DAOFactory factory = DAOFactory.getInstance();
+		UserDAO dao = factory.getUserDAO();
+		User user = null;
+		try {
+			user = dao.getUser(login);
+		} catch (DAOException e) {
+			throw new ServiceException("DAOExeption ", e);
+		}
+		
+		return user;
 	}
 
 

@@ -24,7 +24,7 @@
 
 
 </head>
-  <body>
+ <body>
     
   	<jsp:include page="include/header.jsp"></jsp:include>
 
@@ -43,46 +43,26 @@
 
 	<div class="container w">
 		<div class="row centered">
-			<br><br>
-			<div class="col-lg-3">
-				<img class="img-circle" src="assets/img/pic.jpg" width="110" height="110" alt="">
-				<h4>Frank Lampard</h4>
-				<p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form.</p>
-				<p><a href="#">@Frank_BlackTie</a></p>
-			</div><!-- col-lg-3 -->
+			<br>
+			<br>
 
-			<div class="col-lg-3">
-				<img class="img-circle" src="assets/img/pic2.jpg" width="110" height="110" alt="">
-				<h4>David Wright</h4>
-				<p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form.</p>
-				<p><a href="#">@David_BlackTie</a></p>
-			</div><!-- col-lg-3 -->
+			<c:forEach items="${teachers}" var="teacher">
+				<div class="col-lg-3">					
+					<h4>${teacher.name}</h4>
+					
+					<p>
+						<a href="#">${teacher.email}</a>
+					</p>
+				</div>
+				<!-- col-lg-3 -->
 
-			<div class="col-lg-3">
-				<img class="img-circle" src="assets/img/pic3.jpg" width="110" height="110" alt="">
-				<h4>Mark Milestone</h4>
-				<p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form.</p>
-				<p><a href="#">@Mark_BlackTie</a></p>
-			</div><!-- col-lg-3 -->
-
-			<div class="col-lg-3">
-				<img class="img-circle" src="assets/img/pic4.jpg" width="110" height="110" alt="">
-				<h4>Tania Tissen</h4>
-				<p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form.</p>
-				<p><a href="#">@Tania_BlackTie</a></p>
-			</div><!-- col-lg-3 -->
-
-		</div><!-- row -->
-		<br>
-		<br>
-	</div><!-- container -->
-
-
-
-  	
-  	<jsp:include page="include/footer.jsp"></jsp:include>
-  	 	
-  	
+			</c:forEach>
+		</div>
+		<!-- row -->
+		<br> <br>
+	</div>
+	<!-- container -->
+	<jsp:include page="include/footer.jsp"></jsp:include>  	
   	
     <!-- Bootstrap core JavaScript
     ================================================== -->

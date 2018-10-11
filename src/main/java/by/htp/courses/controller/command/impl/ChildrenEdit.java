@@ -16,9 +16,11 @@ import org.slf4j.LoggerFactory;
 import by.htp.courses.controller.command.Command;
 import by.htp.courses.domain.Child;
 import by.htp.courses.domain.Subject;
+import by.htp.courses.domain.User;
 import by.htp.courses.service.ChildService;
 import by.htp.courses.service.ServiceFactory;
 import by.htp.courses.service.SubjectService;
+import by.htp.courses.service.UserService;
 import by.htp.courses.service.exception.ServiceException;
 
 public class ChildrenEdit implements Command{
@@ -37,24 +39,37 @@ public class ChildrenEdit implements Command{
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		System.out.println(request.getSession().getAttribute("user"));
+		
+		
+
+		if ((User) request.getSession().getAttribute("user") == null ) {		
+			request.setAttribute("errorAccessMessage", "Вам необходимо войти либо зарегистрироваться!");			
+			request.getRequestDispatcher(JSPPagePath.ERROR_PAGE).forward(request, response);
+            return;
+		}
+			
+		
 		ServiceFactory factory = ServiceFactory.getInstance();
 		ChildService childService = factory.getChildService();
+		UserService userService = factory.getUserService();
 		
 		System.out.println("Мы в  ChildrenEdit.java");
 
 		List<Child> children = null;
+		List<User> parents = null;
 		Child child = null;			
 		String goToPage = null;	
 				
 		try {				
 			if (request.getMethod().toUpperCase().equals("POST")) {				
 				
-				//if (request.getParameter(CREATE_PARAM_NAME) != null) {					
+									
 				String name = request.getParameter(NAME_CHILD_PARAM_NAME);				
 				String surname  = request.getParameter(SURNAME_CHILD_PARAM_NAME);
 				LocalDate birthday  = LocalDate.parse(request.getParameter(BIRTH_CHILD_PARAM_NAME));						
-				int parent_id = Integer.parseInt(request.getParameter(PARENT_CHILD_PARAM_NAME));
-						
+				int parent_id = Integer.parseInt(request.getParameter(PARENT_CHILD_PARAM_NAME));						
 				
 				if (request.getParameter(CREATE_PARAM_NAME) != null) {	
 
@@ -62,63 +77,52 @@ public class ChildrenEdit implements Command{
 					child.setName(name);
 					child.setSurname(surname);
 					child.setDateOfBirth(birthday);
-					child.setParentID(parent_id);
+					child.setParentID(parent_id);					
+					childService.create(child);					
 					
-					
-					childService.create(child);
 					goToPage = JSPPagePath.CHILDREN_EDIT;
-				//}
-				}
-
+				
+				}				
 				
 				
-				
-				if (request.getParameter(UPDATE_PARAM_NAME) != null) {
-					int id = Integer.parseInt(request.getParameter(ID_PARAM_NAME));
-					String id222 = request.getParameter("id");
-					System.out.println("НАЖАЛИ НА UPDATE     " + id222);// проверка ip в текстовом формате
-					
+				if (request.getParameter(UPDATE_PARAM_NAME) != null && request.getMethod().toUpperCase().equals("POST")) {
+					int id = Integer.parseInt(request.getParameter(ID_PARAM_NAME));					
 					child = new Child();	
 					child.setId(id);
 					child.setName(name);
 					child.setSurname(surname);
 					child.setDateOfBirth(birthday);
-					//child.setParent(parent);			
+					child.setParentID(parent_id);			
 
 					childService.update(child);
 					logger.info("  new child update= {}", child.getName());
-
 					goToPage = JSPPagePath.CHILDREN_EDIT;
 				}
 
-				if (request.getParameter(DELETE_PARAM_NAME) != null) {
+				if (request.getParameter(DELETE_PARAM_NAME) != null && request.getMethod().toUpperCase().equals("POST")) {
 					int id = Integer.parseInt(request.getParameter(ID_PARAM_NAME));
-
-					childService.delete(id);
-					System.out.println(
-							"НАЖАЛИ НА DELETE  id==   " + id );
-
+					childService.delete(id);					
 					goToPage = JSPPagePath.CHILDREN_EDIT;
 				}
 			}
 			   
-			
-			
-          children =  childService.getAll();		
+						
+          children =  childService.getAll();
+          parents = userService.search("role", "USER");          
 			if(children != null){
 				request.getSession(true).setAttribute("children", children);
-				logger.info("ChildrenEdit getAll children OK {}", children);
+				request.setAttribute("parents", parents);				
 				goToPage = JSPPagePath.CHILDREN_EDIT;
 			}else{
 				request.setAttribute("errorMessage", "There are no children");
-				goToPage = JSPPagePath.CHILDREN_EDIT;//поменять на ошибку??
+				goToPage = JSPPagePath.CHILDREN_EDIT;
 			}	
 			goToPage = JSPPagePath.CHILDREN_EDIT;		
 			
 		} catch (ServiceException e) {
-			//goToPage = JSPPagePath.ERROR_PAGE;
-			// log
-			e.printStackTrace();
+			request.setAttribute("errorMessage", "error");
+			goToPage = JSPPagePath.ERROR_PAGE;
+			 logger.error("ServiceException  {}", e);
 		}		
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher(goToPage);		

@@ -21,23 +21,20 @@ public class SQLUserDAO implements UserDAO {
 	
 	private static final Logger logger = LoggerFactory.getLogger(SQLUserDAO.class);
 	
-	private final static String SELECT_USER_BY_LOGIN_AND_PASSWORD = "SELECT name, role FROM users WHERE login=? and password=?";
+	private final static String SELECT_USER_BY_LOGIN_AND_PASSWORD = "SELECT name, login, role FROM users WHERE login=? and password=?";
+	private final static String SELECT_USER_BY_LOGIN = "SELECT * FROM users WHERE login=?";
 	private final static String CREATE_USER = "INSERT INTO users (name, login, email, password, role) values(?, ?, ?, ?, ?)";
+	private final static String GET_ALL_USERS_LIMIT = "SELECT * FROM users LIMIT ?,?";
 	private final static String GET_ALL_USERS = "SELECT * FROM users";
+	private static final String COUNT_USERS = "SELECT COUNT(*) FROM users";
 	private final static String UPDATE_USER = "UPDATE users SET name = ?, login = ?, email = ?, password = ?, role = ? WHERE id = ?";
 	private static final String DELETE_USER = "DELETE FROM users WHERE id=?";
 	private static final String CHECK_LOGIN = "SELECT login FROM users WHERE login=?";
-	
+	private final static String DELETE_USERS_LESSONS = "DELETE FROM lessons WHERE id_teacher = ?";
+	private final static String DELETE_USERS_CHILDREN = "DELETE FROM children WHERE parent_id = ?";
 	
 	private static final String ROLE_USER = "USER";    
 	    
-
-
-	private Connection connection;
-	private ConnectionPool pool = ConnectionPool.getInstance();
-	
-	
-	
 	
 
 	@Override
@@ -58,8 +55,9 @@ public class SQLUserDAO implements UserDAO {
 
 			if (rs.next()) {
 				user = new User();
-				user.setName(rs.getString(1));				
-				user.setRole(rs.getString(2));
+				user.setName(rs.getString(1));
+				user.setLogin(rs.getString(2));
+				user.setRole(rs.getString(3));
 				logger.info("User {} exists", user.getName());
 			}
 		} catch (InterruptedException e) {
@@ -75,6 +73,48 @@ public class SQLUserDAO implements UserDAO {
 		return user;
 	}
 	
+	
+
+
+	@Override
+	public User getUser(String login) throws DAOException {
+		Connection connection = null;
+		PreparedStatement preparedStatment = null;
+		ResultSet rs = null;		
+		User user = null;		
+		ConnectionPool conPool = ConnectionPool.getInstance();
+		
+		try {
+			connection = conPool.takeConnection();
+			preparedStatment = connection.prepareStatement(SELECT_USER_BY_LOGIN);
+			preparedStatment.setString(1, login);			
+
+			rs = preparedStatment.executeQuery();
+
+			if (rs.next()) {
+				user = new User();
+				user.setId(rs.getInt("id"));
+				user.setName(rs.getString("name"));
+                user.setLogin(rs.getString("login"));
+                user.setEmail(rs.getString("email"));
+                user.setPassword(rs.getString("password")); 
+                user.setRole(rs.getString("role"));
+				logger.info("User {} exists", user.getName());
+			}
+		} catch (InterruptedException e) {
+			logger.error("InterruptedException in SQLUserDAO.getUser() {}", e);		
+			throw new DAOException("InterruptedException in SQLUserDAO.getUser()", e);
+		} catch (SQLException e) {
+			logger.error("Exception in SQLUserDAO.getkUser() {} ", e);			
+			throw new DAOException("SQLException in SQLUserDAO.getUser()", e);
+		} finally {
+			closeResources(rs, preparedStatment, connection);
+		}
+
+		return user;
+	}
+
+
 	
 
 	@Override
@@ -100,6 +140,7 @@ public class SQLUserDAO implements UserDAO {
 				if (countRows == 1) {
 					user = new User();
 					user.setName(name);
+					user.setLogin(login);
 					user.setRole(ROLE_USER);
 					logger.info("User {} created", user.getName());
 				}
@@ -118,24 +159,62 @@ public class SQLUserDAO implements UserDAO {
 	}
 
 	
+
+	@Override
+	public int getAllUsersCount() throws DAOException {
+		Connection connection = null;
+		PreparedStatement preparedStatment = null;
+		ConnectionPool conPool = ConnectionPool.getInstance();
+		String sql = null;
+		ResultSet rs = null;			
+		int result = 0;	
+	    
+	    try {
+	    	connection = conPool.takeConnection();
+			sql = COUNT_USERS;
+						
+			preparedStatment = connection.prepareStatement(sql);						
+			rs = preparedStatment.executeQuery();
+			
+			rs.next();
+            result = rs.getInt(1);
+			
+		} catch (InterruptedException e) {
+			logger.error("InterruptedException in SQLUserDAO.getAllCount {}", e);	
+			throw new DAOException("InterruptedException in SQLUserDAO.getAllCount", e);
+		} catch (SQLException e) {
+			logger.error("SQLException in SQLUserDAO.getAllCount {} ", e);			
+			throw new DAOException("SQLException in SQLUserDAO.getAllCount", e);
+		} finally {
+			closeResources(rs, preparedStatment, connection);
+		}	 
+	     
+		return result;
+	}
+
+	
 	
 	
 	@Override
-	public List<User> getAll(String WHERE) throws DAOException{
+	public List<User> getAll(int currentPage, int elementsOnPage) throws DAOException{
+		
+		logger.info("CERRENT PAAAAAAGR     {}  ELEM ON PAGE   {} ", currentPage, elementsOnPage);
+		
 		Connection connection = null;
 		PreparedStatement preparedStatment = null;
 		ConnectionPool conPool = ConnectionPool.getInstance();
 		String sql = null;
 		ResultSet rs = null;	
+		
 			
 		List<User> users = new ArrayList<>();	
 	    
 	    try {
 	    	connection = conPool.takeConnection();
-			sql = GET_ALL_USERS + WHERE;
-						
-			preparedStatment = connection.prepareStatement(sql);			
-					
+			sql = GET_ALL_USERS_LIMIT;					
+			preparedStatment = connection.prepareStatement(sql);					
+			preparedStatment.setInt(1, (currentPage-1)*elementsOnPage);
+			preparedStatment.setInt(2, elementsOnPage);			
 			rs = preparedStatment.executeQuery();
 			
 			while (rs.next()) {
@@ -180,7 +259,7 @@ public class SQLUserDAO implements UserDAO {
 			preparedStatment = connection.prepareStatement(sql);			
 			preparedStatment.setString(1,  user.getName());
 			preparedStatment.setString(2,  user.getLogin());		
-			preparedStatment.setString(3,  user.getEmail());
+			preparedStatment.setString(3,  user.getEmail());			
 			preparedStatment.setString(4, user.getPassword());
 			preparedStatment.setString(5, user.getRole());
 			preparedStatment.setInt(6, user.getId());			
@@ -205,39 +284,91 @@ public class SQLUserDAO implements UserDAO {
 	@Override
 	public boolean delete(int id) throws DAOException {
 		Connection connection = null;
-		PreparedStatement preparedStatment = null;	
+		PreparedStatement preparedStatment = null;
 		ConnectionPool conPool = ConnectionPool.getInstance();
 		int countRows = 0;
-		logger.info("deleting user by id {}", id);			
-			    
-	    try {
-	    	connection = conPool.takeConnection();
-	    	preparedStatment = connection.prepareStatement(DELETE_USER);			
-	    	preparedStatment.setInt(1, id);
-			countRows = preparedStatment.executeUpdate();
-					
-			logger.info("deleting user by id {}", id);
-		
+		logger.info("deleting user by id {}", id);
 
-		}catch (InterruptedException e) {
-			logger.error("InterruptedException in SQLUserDAO.deleteUser() {}", e);		
+		try {
+			connection = conPool.takeConnection();
+			connection.setAutoCommit(false);
+			try {
+				preparedStatment = connection.prepareStatement(DELETE_USERS_CHILDREN);
+				preparedStatment.setInt(1, id);
+				preparedStatment.executeUpdate();
+
+				preparedStatment = connection.prepareStatement(DELETE_USERS_LESSONS);
+				preparedStatment.setInt(1, id);
+				preparedStatment.executeUpdate();
+
+				preparedStatment = connection.prepareStatement(DELETE_USER);
+				preparedStatment.setInt(1, id);
+				countRows = preparedStatment.executeUpdate();
+
+				connection.commit();
+				logger.info("User id {}   is deleted", id);
+
+			} catch (SQLException e) {
+				connection.rollback();
+				logger.error("Transaction failed", e);
+
+			} finally {
+				connection.setAutoCommit(true);
+			}
+
+		} catch (InterruptedException e) {
+			logger.error("InterruptedException in SQLUserDAO.deleteUser() {}", e);
 			throw new DAOException("InterruptedException in SQLUserDAO.deleteUser()", e);
 		} catch (SQLException e) {
-			logger.error("SQLException in SQLUserDAO.deleteUser() {} ", e);			
+			logger.error("SQLException in SQLUserDAO.deleteUser() {} ", e);
 			throw new DAOException("SQLException in SQLUserDAO.deleteUser()", e);
 		} finally {
 			closeResources(preparedStatment, connection);
 		}
-	    
+
 		return countRows == 1;
 	}
-	
 
 	@Override
 	public List<User> search(String where, String what) throws DAOException {			
 		String WHERE = " where " +  where +  " like '%" + what + "%'";		
-		List<User> users = getAll(WHERE);
-		 return users;
+		Connection connection = null;
+		PreparedStatement preparedStatment = null;
+		ConnectionPool conPool = ConnectionPool.getInstance();
+		String sql = null;
+		ResultSet rs = null;	
+			
+		List<User> users = new ArrayList<>();	
+	    
+	    try {
+	    	connection = conPool.takeConnection();
+			sql = GET_ALL_USERS + WHERE;
+						
+			preparedStatment = connection.prepareStatement(sql);					
+			rs = preparedStatment.executeQuery();
+			
+			while (rs.next()) {				
+				User user = new User();
+				user.setId(rs.getInt("id"));
+				user.setName(rs.getString("name"));
+                user.setLogin(rs.getString("login"));
+                user.setEmail(rs.getString("email"));
+                user.setPassword(rs.getString("password"));
+                user.setRole(rs.getString("role"));
+                users.add(user);	                
+			}
+			
+		} catch (InterruptedException e) {
+			logger.error("InterruptedException in SQLUserDAO.search {}", e);	
+			throw new DAOException("InterruptedException in SQLUserDAO.search", e);
+		} catch (SQLException e) {
+			logger.error("SQLException in SQLUserDAO.search {} ", e);			
+			throw new DAOException("SQLException in SQLUserDAO.search", e);
+		} finally {
+			closeResources(rs, preparedStatment, connection);
+		}
+	 
+	       return users;
 	}
 		
 
@@ -280,7 +411,7 @@ public class SQLUserDAO implements UserDAO {
 		for (AutoCloseable resource : resources) {
 			if (resource != null) {
 				try {
-					logger.info("Closing resourse {} ", resource.getClass());
+					//logger.info("Closing resourse {} ", resource.getClass());
 					resource.close();
 				} catch (Exception e) {
 					logger.error("Resourse not closed {} ", resource.getClass());

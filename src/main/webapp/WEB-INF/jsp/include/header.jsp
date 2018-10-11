@@ -10,7 +10,7 @@
 	<fmt:message bundle="${loc}" key="locale.header.loginform.password.text" var="password" />
 	<fmt:message bundle="${loc}" key="locale.header.loginform.signin.text" var="signIn" />
 	<fmt:message bundle="${loc}" key="locale.header.loginform.signup.text" var="signUp" />
-	<fmt:message bundle="${loc}" key="local.header.loginform.error.text" var="messageLoginError" />	
+	<fmt:message bundle="${loc}" key="locale.header.loginform.errorsignin.text" var="messageSigninError" />	
 	
 	<fmt:message bundle="${loc}" key="locale.header.button.home.text" var="buttonHome" />	
 	<fmt:message bundle="${loc}" key="locale.header.button.teachers.text" var="buttonTeachers" />
@@ -24,6 +24,8 @@
 	<fmt:message bundle="${loc}" key="locale.header.button.teachersedit.text" var="buttonTeachersEdit" />
 	<fmt:message bundle="${loc}" key="locale.header.button.subjectsedit.text" var="buttonSubjectsEdit" />	
 	<fmt:message bundle="${loc}" key="locale.header.button.servicesedit.text" var="buttonServicesEdit" />
+	<fmt:message bundle="${loc}" key="locale.header.button.childrenedit.text" var="buttonChildrenEdit" />
+	<fmt:message bundle="${loc}" key="locale.header.button.lessonsedit.text" var="buttonLessonsEdit" />
 	<fmt:message bundle="${loc}" key="locale.header.button.reports.text" var="buttonReports" />	
 	
 	<fmt:message bundle="${loc}" key="locale.header.profile.text" var="profile" />
@@ -51,15 +53,17 @@
         </div>
 
 
-
+	
 		<div class="navbar-collapse collapse">
 			<ul class="nav navbar-nav navbar-right">
+				 <c:if test="${sessionScope.user.role == 'USER'}">
 				<li class="active"><a href=Controller?command=main_page>${buttonHome}</a></li>
 				<li><a href=Controller?command=teachers_page>${buttonTeachers}</a></li>
 				<li><a href=Controller?command=subjects_page>${buttonSubjects}</a></li>
-				<li><a href=Controller?command=main_page>${buttonServices}</a></li>				
+												
 				<li><a data-toggle="modal" data-target="#myModal"
 					href="#myModal"><i class="fa fa-envelope-o"></i></a></li>
+				</c:if>	
 
 				<li>
 					<form class="loc_button" action="Controller" method="post">
@@ -81,23 +85,32 @@
    <c:if test="${sessionScope.user.role == 'ADMIN'}">
 		<div class="navbar-collapse collapse">
 			<ul class="nav navbar-nav navbar-right">
-				<li><a href=Controller?command=users_edit>${buttonUsersEdit}</a></li>
-				<li><a href="#">${buttonTeachersEdit}</a></li>
-				<li><a href=Controller?command=subjects_edit>${buttonSubjectsEdit}</a></li>
-				<li><a href="#">${buttonServicesEdit}</a></li>
-				<li><a href="#">${buttonReports}</a></li>
-				<li><a href=Controller?command=children_edit>ученики</a></li>
-				<li><a href=Controller?command=lessons_edit>уроки</a></li>
+				<li><a href=Controller?command=users_edit>${buttonUsersEdit}</a></li>				
+				<li><a href=Controller?command=subjects_edit>${buttonSubjectsEdit}</a></li>				
+				<li><a href=Controller?command=children_edit>${buttonChildrenEdit}</a></li>
+				<li><a href=Controller?command=lessons_edit>${buttonLessonsEdit}</a></li>
 			</ul>
 		</div>
 		<!--/.nav-collapse -->
 	</c:if>
+	
+	<c:if test="${sessionScope.user.role == 'TEACHER'}">
+		<div class="navbar-collapse collapse">
+			<ul class="nav navbar-nav navbar-right">							
+				<li><a href=Controller?command=children_edit>${buttonChildrenEdit}</a></li>
+				<li><a href=Controller?command=lessons_edit>${buttonLessonsEdit}</a></li>
+			</ul>
+		</div>
+		<!--/.nav-collapse -->
+	</c:if>
+	
+	
 
 	 <c:if test="${sessionScope.user != null}">
 		<div class="navbar-collapse collapse">
 			<div class="">
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href=Controller?command=ProfileUser>${profile}&nbsp;
+					<li><a href=Controller?command=profile_edit_page>${profile}&nbsp;
 						<c:out value="${sessionScope.user.role}"></c:out>
 						<c:out value="${sessionScope.user.name}"></c:out></a></li>
 					<li><a href=Controller?command=sign_out>${logout}</a></li>
@@ -120,10 +133,11 @@
 				<input type="password" name="password" value="" /> <br /> 
 				<input type="submit" value="${signIn}" />
 			</form>
-			<i> <c:if test="${not empty requestScope.errorMessage}">
-					<c:out value="${requestScope.errorMessage}" />
+			<span style="color: #ff0000;">
+				<c:if test="${not empty requestScope.errorSigninMessage}">
+					<c:out value="${messageSigninError}" />
 				</c:if>
-			</i>
+			</span>
 		</div>
 		<!--enter -->
 	</c:if>

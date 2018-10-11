@@ -13,7 +13,10 @@ public final class JSPPagePath {
 	public static final String SIGN_UP_PAGE = "/WEB-INF/jsp/signup.jsp";
 	public static final String CHILDREN_EDIT = "/WEB-INF/jsp/children_edit.jsp";
 	public static final String LESSONS_EDIT = "/WEB-INF/jsp/lessons_edit.jsp";
-	
+	public static final String TO_PROFILE_EDIT = "/WEB-INF/jsp/to_profile_edit.jsp";
+	public static final String PROFILE_EDIT = "/WEB-INF/jsp/profile_edit.jsp";
+	public static final String PROFILE_EDIT_PAGE = "/WEB-INF/jsp/profile_edit.jsp"; 	
+	public static final String ERROR_PAGE = "/WEB-INF/jsp/error/error.jsp";
 	
 	private JSPPagePath(){}
 }

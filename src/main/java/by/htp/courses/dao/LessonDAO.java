@@ -1,5 +1,6 @@
 package by.htp.courses.dao;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import by.htp.courses.dao.exception.DAOException;
@@ -12,6 +13,6 @@ public interface LessonDAO {
 	List<Lesson> getAll() throws DAOException;
 	boolean update(Lesson lesson) throws DAOException;
 	boolean delete(int id) throws DAOException;
-	List<Lesson> search(String where, String what) throws DAOException;
+	List<Lesson> search(String where, String what, LocalDate date_start, LocalDate date_end) throws DAOException;
 
 }

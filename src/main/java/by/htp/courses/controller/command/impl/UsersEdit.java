@@ -10,6 +10,7 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import by.htp.courses.controller.command.Command;
 import by.htp.courses.domain.User;
@@ -29,45 +30,74 @@ public class UsersEdit implements Command{
 	private static final String ROLE_PARAM_NAME = "role";
 	private static final String UPDATE_PARAM_NAME = "update";
 	private static final String DELETE_PARAM_NAME = "delete";
+	private static final String CREATE_PARAM_NAME = "create";
 	private static final String POST = "POST";
+	
+	private static final String CURRENT_PAGE = "page";
+    private static final int ELEMENTS_PER_PAGE = 25;
+    private static final int DEFAULT_PAGE = 1;
 	
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
+		
+		if (!((User) request.getSession().getAttribute("user")).getRole().equals("ADMIN") ) {		
+			request.setAttribute("errorAccessMessage", "Вам необходимо войти либо зарегистрироваться!");			
+			request.getRequestDispatcher(JSPPagePath.ERROR_PAGE).forward(request, response);
+            return;
+		}
 		
 		String login = request.getParameter(LOGIN_PARAM_NAME);
 		String password = request.getParameter(PASSWORD_PARAM_NAME);
 		String name= request.getParameter(NAME_PARAM_NAME);
 		String email = request.getParameter(EMAIL_PARAM_NAME);
 		String role = request.getParameter(ROLE_PARAM_NAME);
-
-		String goToPage = null;	
-		
-		
-         /*   User user2 = (User) request.getSession().getAttribute("user");
-            if (!user2.getRole().equals("ADMIN")){
-                request.setAttribute("Error", "Wrong user. ");
-                goToPage = JSPPagePath.USERS_EDIT;    // на страницу ошибок У вас нет прав доступа или на страницу входа
-                
-                RequestDispatcher dispatcher = request.getRequestDispatcher(goToPage);        		
-        		dispatcher.forward(request, response);			
-        		
-            }*/
-		
-	
+		int page = DEFAULT_PAGE;
+			
+		if (request.getParameter(CURRENT_PAGE) != null) {
+			page = Integer.parseInt(request.getParameter(CURRENT_PAGE));
+		}			
+				
+		logger.info("Curent page {}", page);
+		       	
 			
 		ServiceFactory factory = ServiceFactory.getInstance();
 		UserService userService = factory.getUserService();
 	
 		List<User> users = null;
 		User user = null;
+		String goToPage = null;	
 							
 		try {			
-			if (request.getMethod().toUpperCase().equals(POST)) {
-				int id = Integer.parseInt(request.getParameter(ID_PARAM_NAME));
+			if (request.getMethod().toUpperCase().equals(POST)) {				
+				
+				if (request.getParameter(CREATE_PARAM_NAME) != null) {	
+					
+					try {					
+							user = userService.signup(name, login, email, password);
+							if (user != null) {
+								 request.getSession(true).setAttribute("user", user);					
+								goToPage = JSPPagePath.MAIN_PAGE;
+							} else {
+								request.setAttribute("errorRegistrationMessage", "User is not created.");
+								logger.error("registration error");
+								goToPage = JSPPagePath.SIGN_UP;
+							}	
+
+					} catch (ServiceException e) {			
+			            request.setAttribute("errorMessage", e.getMessage());
+						logger.error("registration exception", e);
+						logger.error("error      {}", e.getMessage());
+						
+					}											
+				}
+
+				
 				if (request.getParameter(UPDATE_PARAM_NAME) != null) {
+					int id = Integer.parseInt(request.getParameter(ID_PARAM_NAME));
 
 					logger.info("Updating iser id = {}", id);
+					logger.info("Curent page   {}", page);
 
 					user = new User();
 					user.setId(id);
@@ -78,41 +108,36 @@ public class UsersEdit implements Command{
 					user.setPassword(password);
 					
 					userService.update(user);					
-					goToPage = JSPPagePath.USERS_EDIT;
+					
 				}
 				
-
 				if (request.getParameter(DELETE_PARAM_NAME) != null) {
-
+					int id = Integer.parseInt(request.getParameter(ID_PARAM_NAME));
 					userService.delete(id);
 					logger.info("Deleting iser id = {}", id);
-					goToPage = JSPPagePath.USERS_EDIT;
+					
 				}
 			}
-			   
-            users = userService.getAll("");			
-			if(users != null){
-				request.getSession(true).setAttribute("users", users);				
-				goToPage = JSPPagePath.USERS_EDIT;
-			}else{
-				request.setAttribute("errorMessage", "ПОльзователей нет");
-				goToPage = JSPPagePath.USERS_EDIT;//поменять
-			}		
-					
+			
+			
+            users = userService.getAll(page, ELEMENTS_PER_PAGE);	
+            logger.info("Curent page   {}", page);
+            int usersCount = userService.getAllUsersCount();
+            int noOfPages = (int)Math.ceil(((double)usersCount)/ELEMENTS_PER_PAGE);              
+            goToPage = JSPPagePath.USERS_EDIT;
+
+            request.setAttribute("users", users);
+            request.setAttribute("noOfPages", noOfPages);
+            request.getSession().setAttribute("currentPage", page);
+           
 			
 		} catch (ServiceException e) {
-			//goToPage = JSPPagePath.ERROR_PAGE;
-			// log
+			goToPage = JSPPagePath.ERROR_PAGE;			
 			e.printStackTrace();
-		}	
+		}			
 		
-		
-		RequestDispatcher dispatcher = request.getRequestDispatcher(goToPage);
-		
+		RequestDispatcher dispatcher = request.getRequestDispatcher(goToPage);		
 		dispatcher.forward(request, response);			
 		
-		
-		}
-	
-	
+		}	
 }

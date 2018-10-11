@@ -33,9 +33,7 @@
   	<div id="headerwrap">
 		<div class="container">
 			<div class="row centered">
-				<div class="col-lg-8 col-lg-offset-2"></br></br></br>
-				<h1>Слоган <b>номер один</b></h1>
-				<h2>Слоган номер два</h2>
+				<div class="col-lg-8 col-lg-offset-2"></br></br></br>				
 				</div>
 			</div><!-- row -->
 		</div><!-- container -->
@@ -87,29 +85,16 @@
 			<div class="row centered">
 				<h4>ЛУЧШИЕ УЧЕНИКИ</h4>
 				<br>
+				<c:forEach items="${children}" var="child">
 				<div class="col-lg-4">
-					<div class="tilt">
-					<a href="#"><img src="assets/img/pic.jpg" alt=""></a>
+					<div class="tilt">					
+					<h4>${child.name}</h4>
+					<h4>${child.surname}</h4>
+					<p>Математика, Англ язык</p>
 					</div>
-					<h4>Frank Lampard</h4>
-					<p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form.</p>
 				</div>
-
-				<div class="col-lg-4">
-					<div class="tilt">
-					<a href="#"><img src="assets/img/pic.jpg" alt=""></a>
-					</div>
-					<h4>Frank Lampard</h4>
-					<p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form.</p>
-				</div>
-
-				<div class="col-lg-4">
-					<div class="tilt">
-					<a href="#"><img src="assets/img/pic.jpg" alt=""></a>
-					</div>
-					<h4>Frank Lampard</h4>
-					<p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form.</p>					
-				</div>
+				
+				</c:forEach>				
 								
 			</div><!-- row -->
 		</div><!-- container -->
